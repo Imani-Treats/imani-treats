@@ -19,7 +19,7 @@ export default function Hero() {
           src="/images/hero.jpg" // Baker kneading dough
           alt="Artisanal Baking"
           fill
-          className="object-cover object-left opacity-90"
+          className="object-cover object-[27%_75%] opacity-80"
           priority
         />
         {/* Subtle overlay to ensure text readability if image is too bright */}
@@ -30,7 +30,7 @@ export default function Hero() {
       <div className="space-y-10 pt-17">
 
         <div >
-          <span className="uppercase font-bold text-lg text-gray-400 tracking-widest flex items-center justify-center gap-2">
+          <span className="uppercase font-semibold text-lg text-gray-600 tracking-widest flex items-center justify-center gap-2">
             <Clock className="w-5 h-5 inline-block mr-2 text-btn" />
             Next Saturday Drop
           </span>
@@ -52,7 +52,7 @@ export default function Hero() {
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-6xl md:text-9xl font-serif text-black italic leading-tight">
+        <h1 className="text-7xl md:text-9xl  text-black italic leading-tight">
           Artisanal <br /> Baking
         </h1>
 

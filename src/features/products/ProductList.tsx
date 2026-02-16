@@ -1,6 +1,7 @@
 import ProductCard from "./ProductCard";
 import { Product } from "@/types";
 import Link from "next/link";
+import { ArrowRight } from "lucide-react";
 
 // TEMPORARY MOCK DATA (To match your UI screenshot)
 const MOCK_PRODUCTS: Product[] = [
@@ -42,7 +43,7 @@ export default function ProductList() {
           <span className="text-sm font-bold tracking-widest text-orange-600 uppercase">
             The Elite Batch
           </span>
-          <h2 className="text-4xl font-serif text-primary mt-3 italic">
+          <h2 className="text-3xl font-serif text-primary mt-3 italic">
           Reserved Lineup.
           </h2>
         </div>
@@ -53,8 +54,14 @@ export default function ProductList() {
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
-        <div className="mt-12 text-center">
-            <Link href="">View Full Menu</Link>
+        <div className="flex justify-center border-t border-gray-200 pt-12">
+          <Link 
+            href="/products" 
+            className="group flex items-center gap-2 text-sm font-bold tracking-widest uppercase text-primary hover:text-orange-600 transition-colors"
+          >
+            <ArrowRight className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
+            View all products
+          </Link>
         </div>
       </div>
     </section>

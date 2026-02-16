@@ -37,7 +37,7 @@ export default function ReviewSlider() {
   };
 
   return (
-    <section className="bg-primary text-white py-24 px-6 relative overflow-hidden">
+    <section className="bg-primary text-white py-15 px-6 relative overflow-hidden">
       {/* Background decoration (optional subtle circle) */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[600px] h-[600px] bg-white/5 rounded-full blur-3xl z-0 pointer-events-none" />
 
