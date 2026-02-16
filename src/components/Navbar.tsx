@@ -37,7 +37,7 @@ export default function Navbar() {
           </button>
 
           {/* CENTER: Logo */}
-          <Link href="/" className="text-xl font-serif italic font-medium text-primary tracking-tight">
+          <Link href="/" className="text-xl font-sans italic font-medium text-primary tracking-tight">
             Imani Treats
           </Link>
 

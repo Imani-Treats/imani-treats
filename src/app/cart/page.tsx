@@ -90,7 +90,7 @@ export default function CartPage() {
           <div className="p-8 bg-gray-50 border-t border-gray-100 pt-19">
             
             {/* Subtotal Line */}
-            <div className="flex items-end justify-between mb-2 border">
+            <div className="flex items-end justify-between mb-2">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Subtotal
               </span>

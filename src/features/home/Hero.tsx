@@ -7,7 +7,7 @@ import { useCountdown } from "@/hooks/useCountdown";
 
 export default function Hero() {
   // Set the next drop date (Modify this date to test the timer!)
-  const dropDate = "2025-12-25T12:00:00"; 
+  const dropDate = "2026-2-25T12:00:00"; 
   const { days, hours, minutes, seconds } = useCountdown(dropDate);
 
   return (
@@ -52,7 +52,7 @@ export default function Hero() {
         </div>
 
         {/* Main Heading */}
-        <h1 className="text-7xl md:text-9xl  text-black italic leading-tight">
+        <h1 className="text-7xl md:text-9xl font-light text-black italic leading-tight">
           Artisanal <br /> Baking
         </h1>
 

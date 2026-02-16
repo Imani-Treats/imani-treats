@@ -22,7 +22,7 @@ export default function RelatedProducts({
          )}
       </div>
       
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-1 md:gap-6">
+      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-1 gap-y-5 md:gap-6 hover:shadow-xl hover:border-primary/20 transition-all duration-300">
         {products.map((p) => (
           <ProductCard key={p.id} product={p} />
         ))}

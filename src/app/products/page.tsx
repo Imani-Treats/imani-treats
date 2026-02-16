@@ -12,7 +12,7 @@ const ALL_PRODUCTS: Product[] = [
     name: "Artisanal Korean Garlic",
     description: "Cream cheese garlic bread with a sweet and savory glaze.",
     price: 4500,
-    image_url: "/images/cinamon.jpg", // Local image example
+    image_url: "/images/garlic.jpg", // Local image example
     drop_date: "2025-12-25",
     stock: 5 // Low stock example
   },
@@ -21,7 +21,7 @@ const ALL_PRODUCTS: Product[] = [
     name: "Crack Sugar Buns",
     description: "Fluffy brioche buns topped with a crackly sugar crust.",
     price: 3000,
-    image_url: "/images/cinamon.jpg",
+    image_url: "/images/buns.jpg",
     drop_date: "2025-12-25",
     stock: 15
   },
@@ -39,7 +39,7 @@ const ALL_PRODUCTS: Product[] = [
     name: "Banana Bread Loaf",
     description: "Moist, dense, and packed with real bananas and walnuts.",
     price: 6500,
-    image_url: "/images/cinamon3.jpg",
+    image_url: "/images/bread.jpg",
     drop_date: "2025-12-25",
     stock: 2
   },
@@ -48,7 +48,7 @@ const ALL_PRODUCTS: Product[] = [
     name: "Strawberry Parfait",
     description: "Layers of fresh cream, strawberry compote, and sponge cake.",
     price: 4000,
-    image_url: "/images/cinamon2.jpg",
+    image_url: "/images/perfait.jpg",
     drop_date: "2025-12-25",
     stock: 0 // Sold out example logic (we can add later)
   }
@@ -71,7 +71,7 @@ export default function ProductsPage() {
           </Link>
 
           {/* Title */}
-          <div className="space-y-2 border">
+          <div className="space-y-2">
             <span className="text-4xl md:text-6xl font-sans italic text-primary mt-8">
             The Lineup.
             </span>

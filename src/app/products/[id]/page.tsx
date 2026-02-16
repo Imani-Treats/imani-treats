@@ -35,10 +35,10 @@ const ALL_PRODUCTS: ExtendedProduct[] = [
     name: "Crack Sugar Buns", 
     description: "Fluffy brioche buns topped with a crackly sugar crust.", 
     price: 3000, 
-    image_url: "/images/cinamon.jpg",
+    image_url: "/images/buns.jpg",
     images: [
-      "/images/cinamon3.jpg",
-      "/images/cinamon2.jpg"
+      "/images/buns2.jpg",
+      "/images/buns.jpg"
     ],
     drop_date: "2025-12-25", 
     stock: 15 
@@ -62,10 +62,10 @@ const ALL_PRODUCTS: ExtendedProduct[] = [
     name: "Banana Bread Loaf",
     description: "Moist, dense, and packed with real bananas and walnuts.",
     price: 6500,
-    image_url: "/images/cinamon.jpg",
+    image_url: "/images/bread.jpg",
     images: [
-        "/images/cinamon2.jpg",
-        "/images/cinamon3.jpg"
+        "/images/bread2.jpg",
+        "/images/bread.jpg"
     ],
     drop_date: "2025-12-25",
     stock: 2
@@ -75,10 +75,10 @@ const ALL_PRODUCTS: ExtendedProduct[] = [
     name: "Strawberry Parfait",
     description: "Layers of fresh cream, strawberry compote, and sponge cake.",
     price: 4000,
-    image_url: "/images/cinamon.jpg",
+    image_url: "/images/perfait.jpg",
     images: [
-        "/images/cinamon3.jpg",
-        "/images/cinamon2.jpg"
+        "/images/perfait2.jpg",
+        "/images/perfait3.jpg"
     ],
     drop_date: "2025-12-25",
     stock: 0 

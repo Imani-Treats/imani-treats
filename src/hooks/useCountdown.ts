@@ -12,7 +12,7 @@ export function useCountdown(targetDate: string) {
         seconds: Math.floor((difference / 1000) % 60),
       };
     }
-    return { days: 5, hours: 10, minutes: 10, seconds: 0 };
+    return { days: 0, hours: 0, minutes: 0, seconds: 0 };
   };
 
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());

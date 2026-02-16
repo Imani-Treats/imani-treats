@@ -10,7 +10,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Artisanal Plantain Chips",
     description: "Cream cheese garlic bread with a sweet and savory glaze.",
     price: 4500,
-    image_url: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&q=80",
+    image_url: "/images/plantain.jpg", // Local image example
     drop_date: "2025-12-25",
     stock: 10
   },
@@ -19,7 +19,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Greek Yogurt",
     description: "Fluffy brioche buns topped with a crackly sugar crust.",
     price: 3000,
-    image_url: "https://images.unsplash.com/photo-1621303837174-89787a7d4729?auto=format&fit=crop&q=80",
+    image_url: "/images/greek.jpg",
     drop_date: "2025-12-25",
     stock: 15
   },
@@ -28,7 +28,7 @@ const MOCK_PRODUCTS: Product[] = [
     name: "Cinnamon Rolls",
     description: "Classic gooey cinnamon rolls with cream cheese frosting.",
     price: 5000,
-    image_url: "https://images.unsplash.com/photo-1509365465985-25d11c17e812?auto=format&fit=crop&q=80",
+    image_url: "/images/cinamon.jpg", // Local image example
     drop_date: "2025-12-25",
     stock: 8
   }
