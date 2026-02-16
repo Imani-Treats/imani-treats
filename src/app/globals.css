@@ -1,0 +1,26 @@
+@import "tailwindcss";
+
+@theme {
+  /* Define your Colors here */
+  --color-primary: #4A0404;
+  --color-secondary: #d4a373;
+  --color-accent: #FFF5EB;
+  --color-btn: #FF4500;
+  --color-background: #fafafa;
+
+  /* Link fonts */
+  --font-serif: var(--font-cormorant), serif;
+  --font-sans: var(--font-jakarta), sans-serif;
+}
+
+/* Apply defaults using standard CSS */
+body {
+  background-color: var(--color-background);
+  color: var(--color-primary);
+  font-family: var(--font-sans);
+}
+
+/* Headings default to Serif */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-serif);
+}
