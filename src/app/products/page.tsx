@@ -60,19 +60,19 @@ export default function ProductsPage() {
       <div className="max-w-3xl mx-auto">
         
         {/* Header Section */}
-        <div className="mb-12 space-y-6">
+        <div className="mb-12 ">
           {/* Back Link */}
           <Link 
             href="/" 
-            className="inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors"
+            className="inline-flex items-center text-sm text-gray-500 mb-10 hover:text-primary transition-colors"
           >
             <MoveLeft className="w-4 h-4 mr-1" />
             Back
           </Link>
 
           {/* Title */}
-          <div className="space-y-2">
-            <span className="text-5xl md:text-6xl font-sans italic text-primary mt-8">
+          <div className="space-y-2 border">
+            <span className="text-4xl md:text-6xl font-sans italic text-primary mt-8">
             The Lineup.
             </span>
             <p className="text-xs text-gray-400 uppercase pt-3 ">

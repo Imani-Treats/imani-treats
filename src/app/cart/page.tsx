@@ -25,7 +25,7 @@ export default function CartPage() {
         
         {/* --- HEADER --- */}
         <div className="flex items-center justify-between p-8 border-b border-gray-100">
-          <h1 className="text-3xl font-serif text-primary italic">
+          <h1 className="text-2xl font-serif text-primary italic">
             Reservation Bag
           </h1>
           <Link href="/" className="text-gray-400 hover:text-primary transition-colors">
@@ -58,7 +58,7 @@ export default function CartPage() {
 
                 {/* Details */}
                 <div className="flex-1">
-                  <h3 className="font-serif text-xl text-primary">{item.name}</h3>
+                  <h3 className="font-serif text-sm text-primary">{item.name}</h3>
                   
                   {/* Variant (Optional) */}
                   {item.variant && (
@@ -87,14 +87,14 @@ export default function CartPage() {
 
         {/* --- FOOTER SUMMARY --- */}
         {cart.length > 0 && (
-          <div className="p-8 bg-gray-50 border-t border-gray-100">
+          <div className="p-8 bg-gray-50 border-t border-gray-100 pt-19">
             
             {/* Subtotal Line */}
-            <div className="flex items-end justify-between mb-2">
+            <div className="flex items-end justify-between mb-2 border">
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Subtotal
               </span>
-              <span className="text-4xl font-serif text-primary italic">
+              <span className="text-2xl font-serif text-primary italic">
                 ₦{total().toLocaleString()}
               </span>
             </div>
@@ -106,7 +106,7 @@ export default function CartPage() {
 
             {/* Checkout Button */}
             <Link href="/checkout" className="block w-full">
-              <button className="w-full bg-btn text-white py-4 rounded-full font-bold flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-orange-500/20 uppercase tracking-wider text-sm">
+              <button className="w-full bg-btn text-white py-3 rounded-full font-bold flex items-center justify-center gap-2 hover:brightness-110 transition-all shadow-lg shadow-orange-500/20 uppercase tracking-wider text-sm">
                 Check Out <ArrowRight className="w-4 h-4" />
               </button>
             </Link>

@@ -128,12 +128,12 @@ export default function ProductDetailPage() {
   };
 
   return (
-    <div className="bg-[#fafafa] min-h-screen pt-24 pb-12 px-6">
+    <div className="bg-[#fafafa] min-h-screen pt-24 pb-12">
       
         {/* Back Link */}
         <Link 
           href="/products" 
-          className="inline-flex items-center text-sm text-gray-500 pb-10 hover:text-primary transition-colors"
+          className="inline-flex items-center text-sm text-gray-500 pb-10 px-6 hover:text-primary transition-colors"
         >
           <MoveLeft className="w-4 h-4 mr-1" />
           Back
@@ -142,7 +142,7 @@ export default function ProductDetailPage() {
 
         
         {/* --- LEFT: IMAGE SLIDER --- */}
-        <div className="relative aspect-square md:aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden group b">
+        <div className="relative aspect-square md:aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden group">
           
           {/* Main Image */}
           <Image
@@ -191,7 +191,7 @@ export default function ProductDetailPage() {
         </div>
 
         {/* --- RIGHT: PRODUCT INFO (Same as before) --- */}
-        <div className="flex flex-col justify-center space-y-6">
+        <div className="flex flex-col justify-center px-6 space-y-6">
           
           <div>
             <span className="text-orange-500 font-bold text-xs tracking-widest uppercase">
@@ -278,7 +278,7 @@ export default function ProductDetailPage() {
       </div>
       
 {/* Bottom Recommendations */}
-<div className="max-w-6xl mx-auto mb-12">
+<div className="max-w-6xl mx-auto mb-12 px-6">
         <RelatedProducts 
           products={ALL_PRODUCTS.filter(p => p.id !== product.id).slice(0, 4)}
         />
