@@ -3,93 +3,39 @@
 import Link from "next/link";
 import { MoveLeft, ArrowLeft } from "lucide-react";
 import ProductCard from "@/features/products/ProductCard";
-import { Product } from "@/types";
-
-// Extended Mock Data to fill up the page (simulating a full menu)
-const ALL_PRODUCTS: Product[] = [
-  {
-    id: "1",
-    name: "Artisanal Korean Garlic",
-    description: "Cream cheese garlic bread with a sweet and savory glaze.",
-    price: 4500,
-    image_url: "/images/garlic.jpg", // Local image example
-    drop_date: "2025-12-25",
-    stock: 5 // Low stock example
-  },
-  {
-    id: "2",
-    name: "Crack Sugar Buns",
-    description: "Fluffy brioche buns topped with a crackly sugar crust.",
-    price: 3000,
-    image_url: "/images/buns.jpg",
-    drop_date: "2025-12-25",
-    stock: 15
-  },
-  {
-    id: "3",
-    name: "Cinnamon Rolls",
-    description: "Classic gooey cinnamon rolls with cream cheese frosting.",
-    price: 5000,
-    image_url: "/images/cinamon.jpg", // Local image example
-    drop_date: "2025-12-25",
-    stock: 8
-  },
-  {
-    id: "4",
-    name: "Banana Bread Loaf",
-    description: "Moist, dense, and packed with real bananas and walnuts.",
-    price: 6500,
-    image_url: "/images/bread.jpg",
-    drop_date: "2025-12-25",
-    stock: 2
-  },
-  {
-    id: "5",
-    name: "Strawberry Parfait",
-    description: "Layers of fresh cream, strawberry compote, and sponge cake.",
-    price: 4000,
-    image_url: "/images/perfait.jpg",
-    drop_date: "2025-12-25",
-    stock: 0 // Sold out example logic (we can add later)
-  }
-];
+import { PRODUCTS } from "@/lib/data"; // <--- Import from central source
 
 export default function ProductsPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] pt-24 pb-12 px-6">
       <div className="max-w-3xl mx-auto">
         
-        {/* Header Section */}
-        <div className="mb-12 ">
-          {/* Back Link */}
+        <div className="mb-12 space-y-6">
           <Link 
             href="/" 
-            className="inline-flex items-center text-sm text-gray-500 mb-10 hover:text-primary transition-colors"
+            className="inline-flex items-center text-sm text-gray-500 hover:text-primary transition-colors"
           >
             <MoveLeft className="w-4 h-4 mr-1" />
             Back
           </Link>
 
-          {/* Title */}
-          <div className="space-y-2">
-            <span className="text-4xl md:text-6xl font-sans italic text-primary mt-8">
-            The Lineup.
-            </span>
-            <p className="text-xs text-gray-400 uppercase pt-3 ">
-            All Product Below are  Reserved for the Upcoming
-            Saturday drop limited quantities available
+          <div className="mt-5">
+            <h1 className="text-5xl md:text-6xl font-serif text-primary italic mb-2">
+              The Lineup.
+            </h1>
+            <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">
+              All products below are reserved  for the upcoming saturday drop limited quantities available
             </p>
           </div>
         </div>
 
-        {/* Product Grid (Vertical Stack as per screenshot) */}
+        {/* Use the centralized PRODUCTS array */}
         <div className="flex flex-col gap-16 mb-24">
-          {ALL_PRODUCTS.map((product) => (
+          {PRODUCTS.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
         </div>
 
-        {/* Bottom Navigation */}
         <div className="flex justify-center border-t border-gray-200 pt-12">
           <Link 
             href="/" 

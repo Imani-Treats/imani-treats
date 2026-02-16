@@ -4,86 +4,11 @@ import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { MoveLeft, ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, CreditCard, Check } from "lucide-react";
-import { useState } from "react";
+import { useState, useEffect } from "react"; // <--- Added useEffect
 import { useCartStore } from "@/lib/store";
 import ProductCard from "@/features/products/ProductCard";
 import RelatedProducts from "@/features/products/RelatedProducts";
-import { Product } from "@/types";
-
-// --- UPDATED MOCK DATA (Now matches the List Page exactly) ---
-interface ExtendedProduct extends Product {
-  images: string[];
-}
-
-const ALL_PRODUCTS: ExtendedProduct[] = [
-  { 
-    id: "1", 
-    name: "Artisanal Plantain Chips", 
-    description: "Hand-sliced and kettle-fried to perfection. Choose your ripeness level for the perfect crunch.", 
-    price: 4500, 
-    image_url: "/images/cinamon2.jpg", 
-    images: [
-      "/images/cinamon.jpg",
-      "/images/cinamon3.jpg",
-      "/images/cinamon2.jpg"
-    ],
-    drop_date: "2025-12-25", 
-    stock: 10 
-  },
-  { 
-    id: "2", 
-    name: "Crack Sugar Buns", 
-    description: "Fluffy brioche buns topped with a crackly sugar crust.", 
-    price: 3000, 
-    image_url: "/images/buns.jpg",
-    images: [
-      "/images/buns2.jpg",
-      "/images/buns.jpg"
-    ],
-    drop_date: "2025-12-25", 
-    stock: 15 
-  },
-  {
-    id: "3",
-    name: "Cinnamon Rolls",
-    description: "Classic gooey cinnamon rolls with cream cheese frosting.",
-    price: 5000,
-    image_url: "/images/cinamon.jpg", // Local image example
-    images: [
-        "/images/cinamon.jpg",
-        "/images/cinamon2.jpg",
-        "/images/cinamon3.jpg"
-    ],
-    drop_date: "2025-12-25",
-    stock: 8
-  },
-  {
-    id: "4",
-    name: "Banana Bread Loaf",
-    description: "Moist, dense, and packed with real bananas and walnuts.",
-    price: 6500,
-    image_url: "/images/bread.jpg",
-    images: [
-        "/images/bread2.jpg",
-        "/images/bread.jpg"
-    ],
-    drop_date: "2025-12-25",
-    stock: 2
-  },
-  {
-    id: "5",
-    name: "Strawberry Parfait",
-    description: "Layers of fresh cream, strawberry compote, and sponge cake.",
-    price: 4000,
-    image_url: "/images/perfait.jpg",
-    images: [
-        "/images/perfait2.jpg",
-        "/images/perfait3.jpg"
-    ],
-    drop_date: "2025-12-25",
-    stock: 0 
-  }
-];
+import { PRODUCTS } from "@/lib/data";
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -91,15 +16,18 @@ export default function ProductDetailPage() {
   const addToCart = useCartStore((state) => state.addToCart);
 
   // 1. Find product
-  // Default to empty array if no images found to prevent crashes
-  const product = ALL_PRODUCTS.find((p) => p.id === params.id);
-  const productImages = product?.images || [product?.image_url || ""];
+  const product = PRODUCTS.find((p) => p.id === params.id);
+  const productImages = product?.images?.length ? product.images : [product?.image_url || ""];
 
   // 2. States
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
   const [selectedVariant, setSelectedVariant] = useState("Original");
   const [isAdded, setIsAdded] = useState(false);
+
+  // --- SWIPE STATES ---
+  const [touchStart, setTouchStart] = useState(0);
+  const [touchEnd, setTouchEnd] = useState(0);
 
   if (!product) return (
     <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
@@ -108,7 +36,7 @@ export default function ProductDetailPage() {
     </div>
   );
 
-  // Slider Navigation Functions
+  // --- NAVIGATION FUNCTIONS ---
   const nextImage = () => {
     setCurrentImageIndex((prev) => (prev === productImages.length - 1 ? 0 : prev + 1));
   };
@@ -117,11 +45,51 @@ export default function ProductDetailPage() {
     setCurrentImageIndex((prev) => (prev === 0 ? productImages.length - 1 : prev - 1));
   };
 
+  // --- AUTO-SLIDE EFFECT ---
+  useEffect(() => {
+    if (productImages.length <= 1) return; // Don't slide if only 1 image
+
+    const timer = setInterval(() => {
+      nextImage();
+    }, 5000); // Change every 5 seconds
+
+    // Cleanup timer on unmount or when index changes (reset timer on manual interaction)
+    return () => clearInterval(timer);
+  }, [currentImageIndex, productImages.length]);
+
+  // --- SWIPE HANDLERS ---
+  const handleTouchStart = (e: React.TouchEvent) => {
+    setTouchStart(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchMove = (e: React.TouchEvent) => {
+    setTouchEnd(e.targetTouches[0].clientX);
+  };
+
+  const handleTouchEnd = () => {
+    if (!touchStart || !touchEnd) return;
+    
+    const distance = touchStart - touchEnd;
+    const minSwipeDistance = 50;
+
+    if (distance > minSwipeDistance) {
+      nextImage(); // Swiped Left -> Next
+    }
+
+    if (distance < -minSwipeDistance) {
+      prevImage(); // Swiped Right -> Prev
+    }
+    
+    // Reset
+    setTouchStart(0);
+    setTouchEnd(0);
+  };
+
   const handleAddToCart = () => {
     addToCart({
       ...product,
       quantity: quantity,
-      variant: selectedVariant, // <--- Add this line!
+      variant: selectedVariant,
     });
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
@@ -138,13 +106,16 @@ export default function ProductDetailPage() {
           <MoveLeft className="w-4 h-4 mr-1" />
           Back
         </Link>
-      <div className="max-w-6xl mx-auto  grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
-
+      
+      <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-2 gap-6 mb-24">
         
-        {/* --- LEFT: IMAGE SLIDER --- */}
-        <div className="relative aspect-square md:aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden group">
-          
-          {/* Main Image */}
+        {/* --- LEFT: IMAGE SLIDER (Now with Swipe & Auto) --- */}
+        <div 
+          className="relative aspect-square md:aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden group touch-pan-y"
+          onTouchStart={handleTouchStart}
+          onTouchMove={handleTouchMove}
+          onTouchEnd={handleTouchEnd}
+        >
           <Image
             src={productImages[currentImageIndex]}
             alt={product.name}
@@ -153,21 +124,19 @@ export default function ProductDetailPage() {
             priority
           />
 
-          {/* Slider Controls (Only show if > 1 image) */}
           {productImages.length > 1 && (
             <>
-              {/* Left Arrow */}
+              {/* Desktop Arrows (Hidden on mobile usually, or kept for clarity) */}
               <button 
                 onClick={prevImage}
-                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition opacity-0 group-hover:opacity-100"
+                className="absolute left-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition opacity-0 group-hover:opacity-100 hidden md:block"
               >
                 <ChevronLeft className="w-5 h-5 text-primary" />
               </button>
 
-              {/* Remove Right Arrow */}
               <button 
                 onClick={nextImage}
-                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition opacity-0 group-hover:opacity-100 z-100"
+                className="absolute right-4 top-1/2 -translate-y-1/2 bg-white/80 p-2 rounded-full hover:bg-white transition opacity-0 group-hover:opacity-100 hidden md:block z-10"
               >
                 <ChevronRight className="w-5 h-5 text-black" />
               </button>
@@ -186,13 +155,10 @@ export default function ProductDetailPage() {
               </div>
             </>
           )}
-
-  
         </div>
 
-        {/* --- RIGHT: PRODUCT INFO (Same as before) --- */}
+        {/* --- RIGHT: PRODUCT INFO --- */}
         <div className="flex flex-col justify-center px-6 space-y-6">
-          
           <div>
             <span className="text-orange-500 font-bold text-xs tracking-widest uppercase">
               Savory Collection
@@ -277,10 +243,10 @@ export default function ProductDetailPage() {
         </div>
       </div>
       
-{/* Bottom Recommendations */}
-<div className="max-w-6xl mx-auto mb-12 px-6">
+      {/* Bottom Recommendations */}
+      <div className="max-w-6xl mx-auto mb-12 px-6">
         <RelatedProducts 
-          products={ALL_PRODUCTS.filter(p => p.id !== product.id).slice(0, 4)}
+          products={PRODUCTS.filter(p => p.id !== product.id).slice(0, 4)}
         />
       </div>
 

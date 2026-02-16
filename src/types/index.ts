@@ -4,6 +4,7 @@ export interface Product {
     description: string;
     price: number;
     image_url: string; // Note: We use snake_case to match Supabase database columns
+    images: string[];
     drop_date: string;
     stock: number;
   }
