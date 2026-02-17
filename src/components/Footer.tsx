@@ -1,6 +1,6 @@
 "use client";
 
-import Link from "next/link";
+import SocialIcon from "./socialmedia";
 import { Facebook, Instagram, Youtube, ArrowRight, MapPin, Phone, Mail } from "lucide-react";
 
 export default function Footer() {
@@ -70,14 +70,3 @@ export default function Footer() {
   );
 }
 
-// Helper Component for Social Icons
-function SocialIcon({ icon, href }: { icon: React.ReactNode; href: string }) {
-  return (
-    <Link 
-      href={href} 
-      className="w-10 h-10 border border-white/20 rounded-full flex items-center justify-center hover:bg-white hover:text-primary transition-all duration-300"
-    >
-      {icon}
-    </Link>
-  );
-}

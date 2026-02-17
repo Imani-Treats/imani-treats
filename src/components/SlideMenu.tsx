@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { X } from "lucide-react";
+import { X, Facebook, Youtube, Instagram } from "lucide-react";
+import SocialIcon from "./socialmedia";
 import { useEffect, useState } from "react";
 
 interface SlideMenuProps {
@@ -62,7 +63,7 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
 
 
         {/* Menu Links Container */}
-        <div className="flex flex-col h-full space-y-10 pt-30 pl-2">
+        <div className="flex flex-col h-full  pt-10 pace-y-10 pl-2">
           
           {/* Label */}
           <span className="text-orange-500 font-bold text-xs tracking-widest uppercase mb-2">
@@ -79,6 +80,12 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           </nav>
 
         </div>
+
+        <div className="flex gap-4">
+            <SocialIcon icon={<Facebook className="w-5 h-5" />} href="#" />
+            <SocialIcon icon={<Instagram className="w-5 h-5" />} href="#" />
+            <SocialIcon icon={<Youtube className="w-5 h-5" />} href="#" />
+          </div>
       </div>
     </div>
   );
@@ -90,7 +97,7 @@ function MenuLink({ href, label, onClick, isCaps = false }: { href: string; labe
     <Link 
       href={href} 
       onClick={onClick}
-      className={`font-serif text-5xl md:text-6xl text-white hover:text-orange-400 transition-colors duration-300 italic ${
+      className={`font-serif text-4xl md:text-6xl text-white hover:text-orange-400 transition-colors duration-300  ${
         isCaps ? "uppercase" : ""
       }`}
     >
