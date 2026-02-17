@@ -5,9 +5,13 @@ import { AnimatePresence } from "framer-motion";
 import Hero from "@/features/home/Hero";
 import ProductList from "@/features/products/ProductList"; // <--- Import
 import Preloader from "@/components/Preloader";
+import { useCartStore } from "@/lib/store";
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
+  const { hasSeenPreloader, setHasSeenPreloader } = useCartStore();
+  // Initialize loading based on whether user has seen it this session
+  const [isLoading, setIsLoading] = useState(!hasSeenPreloader);
+  
 
   useEffect(() => {
     if (isLoading) {
@@ -17,11 +21,16 @@ export default function Home() {
     }
   }, [isLoading]);
 
+  const handleLoadingComplete = () => {
+    setIsLoading(false);
+    setHasSeenPreloader(true); // Mark as seen globally
+  };
+
   return (
     <>
-    <AnimatePresence mode="wait">
+      <AnimatePresence mode="wait">
         {isLoading && (
-          <Preloader key="preloader" onComplete={() => setIsLoading(false)} />
+          <Preloader key="preloader" onComplete={handleLoadingComplete} />
         )}
       </AnimatePresence>
     <div className="relative overflow-x-hidden">

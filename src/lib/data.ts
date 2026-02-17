@@ -12,7 +12,8 @@ export const PRODUCTS: Product[] = [
       "/images/plantain2.jpg"
     ],
     drop_date: "2025-12-25", 
-    stock: 10 
+    stock: 10,
+    variants: ["Unripe", "Ripe", "Sweet"] 
   },
   { 
     id: "2", 
@@ -25,7 +26,8 @@ export const PRODUCTS: Product[] = [
         "/images/buns2.jpg"
     ],
     drop_date: "2025-12-25", 
-    stock: 15 
+    stock: 15 ,
+    variants: ["Classic", "Chocolate", "Cinanamon swirls"]
   },
   {
     id: "3",
@@ -39,7 +41,8 @@ export const PRODUCTS: Product[] = [
         "/images/cinamon3.jpg"
     ],
     drop_date: "2025-12-25",
-    stock: 8
+    stock: 8,
+    variants: ["Classic", "Chocolate"]
   },
   {
     id: "4",
@@ -53,7 +56,8 @@ export const PRODUCTS: Product[] = [
         "/images/greek3.jpg"
     ],
     drop_date: "2025-12-25",
-    stock: 0 
+    stock: 0,
+    variants: ["Plain", "Sweetened", "Parfaits"]
   },
   {
     id: "5",
@@ -67,6 +71,7 @@ export const PRODUCTS: Product[] = [
         "/images/greek3.jpg"
     ],
     drop_date: "2025-12-25",
-    stock: 0 
+    stock: 1,
+    variants: ["Beef", "Chicken", "Asun"] 
   }
 ];

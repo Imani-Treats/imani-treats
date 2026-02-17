@@ -12,16 +12,22 @@ export interface CartItem {
 
 interface CartState {
   cart: CartItem[];
+  hasSeenPreloader: boolean;
+  setHasSeenPreloader: (seen: boolean) => void;
   addToCart: (product: CartItem) => void;
-  removeFromCart: (productId: string, variant?: string) => void; // UPDATED: Accepts variant
+  removeFromCart: (productId: string, variant?: string) => void;
+  updateQuantity: (productId: string, quantity: number, variant?: string) => void;
   clearCart: () => void;
-  total: () => number;
+  getTotal: () => number;
 }
 
 export const useCartStore = create<CartState>()(
   persist(
     (set, get) => ({
-      cart: [],
+      cart: [], // Unified name to match interface
+      hasSeenPreloader: false,
+      
+      setHasSeenPreloader: (seen) => set({ hasSeenPreloader: seen }),
       
       addToCart: (product) => {
         const currentCart = get().cart;
@@ -43,23 +49,33 @@ export const useCartStore = create<CartState>()(
         }
       },
 
-      // --- FIX IS HERE ---
       removeFromCart: (id, variant) => {
         set({
           cart: get().cart.filter((item) => {
             // Keep the item if the ID doesn't match OR if the variant doesn't match
-            // This ensures we only delete the specific ID+Variant combo
             return !(item.id === id && item.variant === variant);
           }),
         });
       },
 
+      updateQuantity: (id, quantity, variant) => {
+        set({
+          cart: get().cart.map((item) =>
+            item.id === id && item.variant === variant
+              ? { ...item, quantity: Math.max(1, quantity) }
+              : item
+          ),
+        });
+      },
+
       clearCart: () => set({ cart: [] }),
       
-      total: () => get().cart.reduce((sum, item) => sum + item.price * item.quantity, 0),
+      getTotal: () => {
+        return get().cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+      },
     }),
     {
-      name: 'imani-cart-storage',
+      name: 'imani-cart-storage', // Key in local storage
     }
   )
 );

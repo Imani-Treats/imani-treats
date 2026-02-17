@@ -16,12 +16,15 @@ export default function ProductDetailPage() {
   const addToCart = useCartStore((state) => state.addToCart);
 
   const product = PRODUCTS.find((p) => p.id === params.id);
+
   const productImages = product?.images?.length ? product.images : [product?.image_url || ""];
   
   // States
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState("Original");
+  const [selectedVariant, setSelectedVariant] = useState(
+    product?.variants?.[0] || "Standard"
+  );
   const [isAdded, setIsAdded] = useState(false);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
   
@@ -133,7 +136,7 @@ export default function ProductDetailPage() {
                 </span>
               )}
             </div>
-            <h1 className="text-3xl font-serif text-primary italic mt-2 mb-4">{product.name}</h1>
+            <h1 className="text-2xl font-bold text-primary mt-2 mb-4">{product.name}</h1>
             <p className="text-2xl font-sans font-medium text-gray-900">₦{product.price.toLocaleString()}</p>
           </div>
 
@@ -147,16 +150,22 @@ export default function ProductDetailPage() {
           </div>
           <hr className="border-gray-200" />
 
-          {/* Variants */}
-          {!isSoldOut && (
+          {/* Variants Section */}
+          {!isSoldOut && product.variants && product.variants.length > 0 && (
             <div>
-              <span className="block text-xs font-bold text-gray-900 uppercase mb-3">Select Variety</span>
+              <span className="block text-xs font-bold text-gray-900 uppercase mb-3">
+                Select Variety
+              </span>
               <div className="flex flex-wrap gap-3">
-                {["Lightly Salted", "Spicy Chili", "Sweet Caramelized"].map((variant) => (
+                {product.variants.map((variant) => (
                   <button
                     key={variant}
                     onClick={() => setSelectedVariant(variant)}
-                    className={`px-4 py-2 text-xs font-bold border transition-colors ${selectedVariant === variant ? "bg-primary text-white border-primary" : "bg-transparent text-gray-500 border-gray-300 hover:border-primary"}`}
+                    className={`px-4 py-2 text-[10px] font-bold border transition-all duration-300 ${
+                      selectedVariant === variant
+                        ? "bg-primary text-white border-primary shadow-md"
+                        : "bg-transparent text-gray-500 border-gray-200 hover:border-primary/50"
+                    }`}
                   >
                     {variant.toUpperCase()}
                   </button>

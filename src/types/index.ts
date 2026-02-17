@@ -7,6 +7,7 @@ export interface Product {
     images: string[];
     drop_date: string;
     stock: number;
+    variants?: string[];
   }
   
   // ... (other types if any)
