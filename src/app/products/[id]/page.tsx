@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
-import { MoveLeft, ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, CreditCard, Check } from "lucide-react";
+import { MoveLeft, ChevronLeft, ChevronRight, Minus, Plus, ExternalLink, ShoppingBag, CreditCard, Check } from "lucide-react";
 import { useState, useEffect } from "react"; // <--- Added useEffect
 import { useCartStore } from "@/lib/store";
 import ProductCard from "@/features/products/ProductCard";
@@ -163,7 +163,7 @@ export default function ProductDetailPage() {
             <span className="text-orange-500 font-bold text-xs tracking-widest uppercase">
               Savory Collection
             </span>
-            <h1 className="text-2xl font-serif text-primary italic mt-2 mb-4">
+            <h1 className="text-2xl font-serif text-primary font-bold mt-2 mb-4">
               {product.name}
             </h1>
             <p className="text-xl font-sans font-medium text-gray-900">
@@ -238,6 +238,13 @@ export default function ProductDetailPage() {
                 BUY NOW - ₦{(product.price * quantity).toLocaleString()}
                 <CreditCard className="w-5 h-5" />
               </button>
+              <Link href="/" className="flex items-center gap-1 mt-2 m-auto">
+        
+                <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary">
+                  Bulk Order?
+                  </span>
+                  <ExternalLink className="h-3 w-3"/> 
+                </Link>
             </div>
           </div>
         </div>
