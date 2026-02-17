@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import Image from "next/image";
 import { X } from "lucide-react";
 import { useEffect, useState } from "react";
 
@@ -37,7 +38,7 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-row justify-between">
+        <div className="flex flex-row justify-between border">
                   {/* Close Button */}
           <span>
             <button onClick={onClose} className="absolute top-8 left-8 text-white/60 hover:text-white transition-colors" >
@@ -45,7 +46,17 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           </button>
         </span>
  
-        <span><h1>Imani Treats</h1></span>
+        <span>
+          <div className="relative w-32 h-32">
+          <Image
+            src="/images/logo.png" 
+            alt="TikTok"
+            fill
+            className="object-contain"
+          />
+          </div>
+
+        </span>
         
         </div>
 
@@ -60,11 +71,11 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
 
           {/* Links List */}
           <nav className="flex flex-col gap-8">
-            <MenuLink href="/" label="Products" onClick={onClose} isCaps/>
-            <MenuLink href="#products" label="Recipes" onClick={onClose} isCaps />
+            <MenuLink href="/products" label="Products" onClick={onClose} isCaps/>
+            {/* <MenuLink href="#products" label="Recipes" onClick={onClose} isCaps /> */}
             <MenuLink href="#" label="About" onClick={onClose} isCaps />
             <MenuLink href="#" label="Where to Buy" onClick={onClose} isCaps/>
-            <MenuLink href="#" label="joy" onClick={onClose} isCaps/>
+            <MenuLink href="#" label="fun" onClick={onClose} isCaps/>
           </nav>
 
         </div>
