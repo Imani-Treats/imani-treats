@@ -1,7 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { ShoppingBag, Menu } from "lucide-react";
 import { useCartStore } from "@/lib/store";
 import { useEffect, useState } from "react";
@@ -38,16 +37,8 @@ export default function Navbar() {
           </button>
 
           {/* CENTER: Logo */}
-          <Link href="/" className="flex text-xl font-sans font-medium text-primary tracking-tight">
-                    <div className=" w-10 h-10">
-                    <Image
-                      src="/images/logo.png" 
-                      alt="TikTok"
-                      fill
-                      className="object-contain"
-                    />
-                    </div>
-            {/* <span>Imani Treats</span> */}
+          <Link href="/" className="text-xl font-sans font-medium text-primary tracking-tight">
+            Imani Treats
           </Link>
 
           {/* RIGHT: Cart */}

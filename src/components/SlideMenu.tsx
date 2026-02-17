@@ -38,7 +38,7 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        <div className="flex flex-row justify-between border">
+        <div className="flex flex-row justify-between">
                   {/* Close Button */}
           <span>
             <button onClick={onClose} className="absolute top-8 left-8 text-white/60 hover:text-white transition-colors" >
