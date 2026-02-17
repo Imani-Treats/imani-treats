@@ -90,7 +90,7 @@ export default function Hero() {
         </Link>
         <button 
               onClick={() => setIsBulkOpen(true)}
-              className="text-xs font-bold uppercase tracking-widest text-primary/70 hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all">
+              className="text-xs font-bold uppercase tracking-widest text-primary/70 hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all mt-2">
               Bulk Orders?
         </button>
 
