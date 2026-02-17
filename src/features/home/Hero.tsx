@@ -70,9 +70,9 @@ export default function Hero() {
         </div>
 
         {/* --- INTERACTIVE MARQUEE HEADING --- */}
-        <div className="w-full overflow-hidden py-4 cursor-grab active:cursor-grabbing select-none">
+        <div className="w-full overflow-hidden py-4 select-none">
           <InteractiveMarquee baseVelocity={-1}>
-            Your Cravings, Sorted
+            Your Cravings<span className="text-btn">, </span> Sorted
           </InteractiveMarquee>
         </div>
         <span className="text-xs font-bold tracking-[0.2em] uppercase text-black">
@@ -81,7 +81,7 @@ export default function Hero() {
         {/* CTA Button */}
         <Link 
           href="/products"
-          className="inline-block bg-primary text-white px-10 py-5 mt-10 text-sm uppercase font-bold tracking-widest hover:bg-orange-700 hover:scale-105 rounded-full transition-all duration-300 shadow-xl"
+          className="inline-block bg-primary px-10 py-4 mt-10 uppercase font-semibold text-sm text-white tracking-widest hover:bg-orange-700 hover:scale-105 rounded-full transition-all duration-300 shadow-xl"
         >
           View Treats
         </Link>
@@ -92,10 +92,10 @@ export default function Hero() {
 
 // --- SUB-COMPONENTS ---
 
-// 1. The Interactive Marquee Logic
-function InteractiveMarquee({ children, baseVelocity = 100 }: { children: string; baseVelocity: number }) {
+// 1. The Interactive Marquee Logic (Updated: Removed Drag)
+function InteractiveMarquee({ children, baseVelocity = 100 }: { children: React.ReactNode; baseVelocity: number }) {
   const baseX = useMotionValue(0);
-  //const { scrollY } = useSpring(0); // Placeholder if we wanted scroll effects
+  // const { scrollY } = useSpring(0); 
   const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`);
 
   const directionFactor = useRef<number>(1);
@@ -107,7 +107,6 @@ function InteractiveMarquee({ children, baseVelocity = 100 }: { children: string
       // Calculate move distance based on velocity and time delta (smooth on all refresh rates)
       let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
       
-      // Reverse direction if needed (optional logic, keeping it simple here)
       if (baseVelocity > 0) {
         directionFactor.current = 1;
       } 
@@ -116,15 +115,10 @@ function InteractiveMarquee({ children, baseVelocity = 100 }: { children: string
     }
   });
 
-  // Handle Dragging
-  const handleDrag = (_: any, info: PanInfo) => {
-    // Add the drag distance to the current position to allow "throwing"
-    baseX.set(baseX.get() + info.delta.x / 5); // Divide by 5 to dampen the drag speed relative to pixels
-  };
 
   return (
     <div 
-      className="flex flex-nowrap whitespace-nowrap"
+      className="flex flex-nowrap whitespace-nowrap cursor-pointer"
       onPointerDown={() => setIsPaused(true)} // Stop on touch/click
       onPointerUp={() => setIsPaused(false)}   // Resume on release
       onPointerLeave={() => setIsPaused(false)} // Resume if mouse leaves
@@ -132,10 +126,6 @@ function InteractiveMarquee({ children, baseVelocity = 100 }: { children: string
       <motion.div 
         className="flex flex-nowrap gap-10 pr-10"
         style={{ x }}
-        drag="x"
-        dragConstraints={{ left: 0, right: 0 }} // Infinite drag illusion
-        dragElastic={0.000001} // Removes spring back
-        onDrag={handleDrag}
       >
         {/* Render text 8 times to ensure seamless loop on large screens */}
         {Array.from({ length: 8 }).map((_, i) => (
