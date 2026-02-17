@@ -4,7 +4,16 @@ import Link from "next/link";
 import Image from "next/image";
 import { Clock } from 'lucide-react';
 import { useCountdown } from "@/hooks/useCountdown";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import { 
+  motion, 
+  useAnimationFrame, 
+  useMotionValue, 
+  useTransform, 
+  useSpring,
+  useMotionValueEvent,
+  PanInfo
+} from "framer-motion";
 
 export default function Hero() {
   // 1. Calculate the next Saturday dynamically
@@ -19,7 +28,7 @@ export default function Hero() {
   const { days, hours, minutes, seconds } = useCountdown(targetDate);
 
   return (
-    <section className="relative w-full h-[90vh] flex flex-col justify-center items-center text-center px-4 overflow-hidden">
+    <section className="relative w-full h-[90vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
       
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
@@ -34,76 +43,143 @@ export default function Hero() {
       </div>
 
       {/* Content */}
-      <div className="space-y-10 pt-17">
+      <div className=" w-full relative z-10 flex flex-col items-center">
 
+        {/* Top Label */}
         <div>
-          <span className="uppercase font-semibold text-lg text-gray-600 tracking-widest flex items-center justify-center gap-2">
-            <Clock className="w-5 h-5 inline-block mr-2 text-btn" />
+          <span className="uppercase font-semibold text-lg text-gray-800 tracking-widest flex items-center justify-center gap-2 bg-white/40 backdrop-blur-md px-4 py-2 rounded-full shadow-sm">
+            <Clock className="w-5 h-5 inline-block text-btn" />
             Next Saturday Drop
           </span>
         </div>
         
         {/* Timer Section */}
-        <div className="flex flex-col items-center gap-2">
-          <span className="text-sm font-bold tracking-widest uppercase text-primary/80">
+        <div className="flex flex-col items-center gap-5 mt-2">
+          <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary/90">
             Next Drop In:
           </span>
           <div className="flex gap-4 text-primary font-serif">
             <TimeBox value={days} label="Days" />
-            <span className="text-2xl mt-2">:</span>
+            <span className="text-2xl mt-1 opacity-50">:</span>
             <TimeBox value={hours} label="Hrs" />
-            <span className="text-2xl mt-2">:</span>
+            <span className="text-2xl mt-1 opacity-50">:</span>
             <TimeBox value={minutes} label="Mins" />
-            <span className="text-2xl mt-2">:</span>
+            <span className="text-2xl mt-1 opacity-50">:</span>
             <TimeBox value={seconds} label="Secs" />
           </div>
         </div>
 
-        {/* Main Heading */}
-        <h1 className="text-7xl md:text-9xl font-medium text-black italic leading-tight">
-          Artisanal <br /> Baking
-        </h1>
-
+        {/* --- INTERACTIVE MARQUEE HEADING --- */}
+        <div className="w-full overflow-hidden py-4 cursor-grab active:cursor-grabbing select-none">
+          <InteractiveMarquee baseVelocity={-1}>
+            Your Cravings, Sorted
+          </InteractiveMarquee>
+        </div>
+        <span className="text-xs font-bold tracking-[0.2em] uppercase text-black">
+            We have a flavour for every mood
+          </span>
         {/* CTA Button */}
         <Link 
           href="/products"
-          className="inline-block bg-white text-primary px-8 py-4 text-sm uppercase font-medium tracking-widest hover:bg-accent rounded-3xl transition-colors duration-300"
+          className="inline-block bg-primary text-white px-10 py-5 mt-10 text-sm uppercase font-bold tracking-widest hover:bg-orange-700 hover:scale-105 rounded-full transition-all duration-300 shadow-xl"
         >
-          view saturday lineup
+          View Treats
         </Link>
       </div>
     </section>
   );
 }
 
-// Helper Component
-function TimeBox({ value, label }: { value: number; label: string }) {
+// --- SUB-COMPONENTS ---
+
+// 1. The Interactive Marquee Logic
+function InteractiveMarquee({ children, baseVelocity = 100 }: { children: string; baseVelocity: number }) {
+  const baseX = useMotionValue(0);
+  //const { scrollY } = useSpring(0); // Placeholder if we wanted scroll effects
+  const x = useTransform(baseX, (v) => `${wrap(-20, -45, v)}%`);
+
+  const directionFactor = useRef<number>(1);
+  const [isPaused, setIsPaused] = useState(false);
+
+  // Auto-scroll loop
+  useAnimationFrame((t, delta) => {
+    if (!isPaused) {
+      // Calculate move distance based on velocity and time delta (smooth on all refresh rates)
+      let moveBy = directionFactor.current * baseVelocity * (delta / 1000);
+      
+      // Reverse direction if needed (optional logic, keeping it simple here)
+      if (baseVelocity > 0) {
+        directionFactor.current = 1;
+      } 
+      
+      baseX.set(baseX.get() + moveBy);
+    }
+  });
+
+  // Handle Dragging
+  const handleDrag = (_: any, info: PanInfo) => {
+    // Add the drag distance to the current position to allow "throwing"
+    baseX.set(baseX.get() + info.delta.x / 5); // Divide by 5 to dampen the drag speed relative to pixels
+  };
+
   return (
-    <div className="flex flex-col items-center">
-      <span className="text-3xl font-bold leading-none">
-        {value.toString().padStart(2, '0')}
-      </span>
-      <span className="text-[10px] uppercase tracking-wider opacity-70">{label}</span>
+    <div 
+      className="flex flex-nowrap whitespace-nowrap"
+      onPointerDown={() => setIsPaused(true)} // Stop on touch/click
+      onPointerUp={() => setIsPaused(false)}   // Resume on release
+      onPointerLeave={() => setIsPaused(false)} // Resume if mouse leaves
+    >
+      <motion.div 
+        className="flex flex-nowrap gap-10 pr-10"
+        style={{ x }}
+        drag="x"
+        dragConstraints={{ left: 0, right: 0 }} // Infinite drag illusion
+        dragElastic={0.000001} // Removes spring back
+        onDrag={handleDrag}
+      >
+        {/* Render text 8 times to ensure seamless loop on large screens */}
+        {Array.from({ length: 8 }).map((_, i) => (
+          <h1 
+            key={i} 
+            className="text-[10rem] md:text-[9rem] font-black text-black leading-none flex-shrink-0 tracking-tighter opacity-90 hover:opacity-100 transition-opacity uppercase"
+          >
+            {children} <span className="text-orange-600 mx-4">•</span>
+          </h1>
+        ))}
+      </motion.div>
     </div>
   );
 }
 
-// --- HELPER LOGIC: FIND NEXT SATURDAY ---
+// 2. Timer Helper
+function TimeBox({ value, label }: { value: number; label: string }) {
+  return (
+    <div className="flex flex-col items-center">
+      <span className="text-4xl font-bold leading-none bg-white/50 backdrop-blur-sm px-2 rounded-lg min-w-[3.5rem]">
+        {value.toString().padStart(2, '0')}
+      </span>
+      <span className="text-[10px] uppercase tracking-wider font-bold text-secondary mt-1">{label}</span>
+    </div>
+  );
+}
+
+// 3. Date Helper
 function getNextSaturday() {
   const now = new Date();
-  const dayOfWeek = now.getDay(); // 0 (Sun) to 6 (Sat)
+  const dayOfWeek = now.getDay(); 
   const daysUntilSaturday = (6 - dayOfWeek + 7) % 7; 
-  
-  // If today is Saturday, set target to NEXT Saturday (7 days later)
-  // or keep it 0 if you want it to be "Today" until the drop time passes.
-  // Here we add 7 days if it's already Saturday to look ahead.
   const daysToAdd = daysUntilSaturday === 0 ? 7 : daysUntilSaturday;
 
   const nextSaturday = new Date(now);
   nextSaturday.setDate(now.getDate() + daysToAdd);
-  
-  // Set drop time to 9:00 AM
   nextSaturday.setHours(9, 0, 0, 0);
 
   return nextSaturday;
+}
+
+// 4. Math Helper for wrapping range
+// Wraps 'v' such that min <= v < max
+function wrap(min: number, max: number, v: number) {
+  const rangeSize = max - min;
+  return ((((v - min) % rangeSize) + rangeSize) % rangeSize) + min;
 }

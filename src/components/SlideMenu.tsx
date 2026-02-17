@@ -55,10 +55,11 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
 
           {/* Links List */}
           <nav className="flex flex-col gap-6">
-            <MenuLink href="/" label="Bakery Home" onClick={onClose} />
-            <MenuLink href="#products" label="The Drop" onClick={onClose} />
-            <MenuLink href="#" label="About Us" onClick={onClose} isCaps />
-            <MenuLink href="#" label="Pick-up Info" onClick={onClose} />
+            <MenuLink href="/" label="Products" onClick={onClose} />
+            <MenuLink href="#products" label="Recipes" onClick={onClose} />
+            <MenuLink href="#" label="About" onClick={onClose} isCaps />
+            <MenuLink href="#" label="Where to Buy" onClick={onClose} />
+            <MenuLink href="#" label="joy" onClick={onClose} />
           </nav>
 
         </div>

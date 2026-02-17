@@ -57,7 +57,7 @@ export default function Footer() {
           <div >|</div>
           <div className="flex items-center gap-2">
             <Phone className="w-3 h-3" />
-            <span>09020007199</span>
+            <span>090 0000 0000</span>
           </div>
       </div>
         <div className="hidden md:block">|</div>
