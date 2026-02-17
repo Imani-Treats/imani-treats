@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { ExternalLink, Clock } from 'lucide-react';
+import { Clock } from 'lucide-react';
 import { useCountdown } from "@/hooks/useCountdown";
 import { useEffect, useState, useRef } from "react";
 import { 
@@ -14,10 +14,12 @@ import {
   useMotionValueEvent,
   PanInfo
 } from "framer-motion";
+import BulkOrderModal from "@/components/BulkOrderModal";
 
 export default function Hero() {
   // 1. Calculate the next Saturday dynamically
   const [targetDate, setTargetDate] = useState<string>("");
+  const [isBulkOpen, setIsBulkOpen] = useState(false);
 
   useEffect(() => {
     const nextSaturday = getNextSaturday();
@@ -28,6 +30,7 @@ export default function Hero() {
   const { days, hours, minutes, seconds } = useCountdown(targetDate);
 
   return (
+    <>
     <section className="relative w-full h-[90vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
       
       {/* Background Image */}
@@ -85,16 +88,16 @@ export default function Hero() {
         >
           View Treats
         </Link>
-        <Link href="/" className="flex items-center gap-1 mt-2">
-        
-        <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary">
-           Bulk Order?
-          </span>
-          <ExternalLink className="h-3 w-3"/> 
-        </Link>
+        <button 
+              onClick={() => setIsBulkOpen(true)}
+              className="text-xs font-bold uppercase tracking-widest text-primary/70 hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all">
+              Bulk Orders?
+        </button>
 
       </div>
     </section>
+    <BulkOrderModal isOpen={isBulkOpen} onClose={() => setIsBulkOpen(false)} />
+    </>
   );
 }
 
