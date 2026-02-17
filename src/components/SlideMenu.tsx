@@ -37,29 +37,34 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           isOpen ? "translate-x-0" : "-translate-x-full"
         }`}
       >
-        {/* Close Button */}
-        <button 
-          onClick={onClose}
-          className="absolute top-8 left-8 text-white/60 hover:text-white transition-colors"
-        >
-          <X className="w-8 h-8 font-light" />
-        </button>
+        <div className="flex flex-row justify-between">
+                  {/* Close Button */}
+          <span>
+            <button onClick={onClose} className="absolute top-8 left-8 text-white/60 hover:text-white transition-colors" >
+            <X className="w-8 h-8 font-light" />
+          </button>
+        </span>
+ 
+        <span><h1>Imani Treats</h1></span>
+        
+        </div>
+
 
         {/* Menu Links Container */}
-        <div className="flex flex-col justify-center h-full space-y-10 pl-4">
+        <div className="flex flex-col h-full space-y-10 pt-30 pl-2">
           
           {/* Label */}
           <span className="text-orange-500 font-bold text-xs tracking-widest uppercase mb-2">
-            Navigation
+            [Navigation]
           </span>
 
           {/* Links List */}
-          <nav className="flex flex-col gap-6">
-            <MenuLink href="/" label="Products" onClick={onClose} />
-            <MenuLink href="#products" label="Recipes" onClick={onClose} />
+          <nav className="flex flex-col gap-8">
+            <MenuLink href="/" label="Products" onClick={onClose} isCaps/>
+            <MenuLink href="#products" label="Recipes" onClick={onClose} isCaps />
             <MenuLink href="#" label="About" onClick={onClose} isCaps />
-            <MenuLink href="#" label="Where to Buy" onClick={onClose} />
-            <MenuLink href="#" label="joy" onClick={onClose} />
+            <MenuLink href="#" label="Where to Buy" onClick={onClose} isCaps/>
+            <MenuLink href="#" label="joy" onClick={onClose} isCaps/>
           </nav>
 
         </div>

@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { Clock } from 'lucide-react';
+import { ExternalLink, Clock } from 'lucide-react';
 import { useCountdown } from "@/hooks/useCountdown";
 import { useEffect, useState, useRef } from "react";
 import { 
@@ -85,6 +85,14 @@ export default function Hero() {
         >
           View Treats
         </Link>
+        <Link href="/" className="flex items-center gap-1 mt-2">
+        
+        <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary">
+           Bulk Order?
+          </span>
+          <ExternalLink className="h-3 w-3"/> 
+        </Link>
+
       </div>
     </section>
   );

@@ -8,13 +8,13 @@ export default function ProductList() {
   const featuredProducts = PRODUCTS.slice(0, 3);
 
   return (
-    <section id="products" className="py-24 px-6 bg-[#fafafa]">
+    <section id="products" className="py-15 px-6 bg-[#fafafa]">
       <div className="max-w-7xl mx-auto">
         <div className="mb-16">
           <span className="text-sm font-bold tracking-widest text-orange-600 uppercase">
             The Selection
           </span>
-          <h2 className="text-5xl font-serif text-primary mt-3 italic">
+          <h2 className="text-4xl font-serif text-primary">
             Reserved Lineup.
           </h2>
         </div>
@@ -25,7 +25,7 @@ export default function ProductList() {
           ))}
         </div>
 
-        <div className="flex justify-center border-t border-gray-200 pt-12">
+        <div className="flex justify-center border-t border-gray-200 mt-4 pt-4">
           <Link 
             href="/products" 
             className="group flex items-center gap-2 text-sm font-bold tracking-widest uppercase text-primary hover:text-orange-600 transition-colors"

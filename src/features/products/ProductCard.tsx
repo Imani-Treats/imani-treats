@@ -35,7 +35,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         <div className="py-4 px-2 flex flex-col flex-1">
           
           {/* Title */}
-          <h3 className="font-serif text-[15px] md:text-xl text-primary mb-1 group-hover:text-orange-600 transition-colors">
+          <h3 className="font-serif font-bold text-[15px] md:text-xl text-primary mb-1 group-hover:text-orange-600 transition-colors">
             {product.name}
           </h3>
           
