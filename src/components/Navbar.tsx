@@ -43,12 +43,12 @@ export default function Navbar() {
 
           {/* RIGHT: Cart */}
           <Link href="/cart" className="flex relative group items-center text-black  hover:text-primary transition-colors gap-[3px]">
-            <span className="text-sm uppercase">Bag</span>
+            <span className="text-xs uppercase">Bag</span>
                 
                 
                 {/* Badge */}
                 {count > 0 && (
-                  <span >
+                  <span className="text-xs">
                    ({count})
                   </span>
                 )}
