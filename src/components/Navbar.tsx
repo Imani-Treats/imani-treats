@@ -42,8 +42,8 @@ export default function Navbar() {
           </Link>
 
           {/* RIGHT: Cart */}
-          <Link href="/cart" className="flex relative group items-center text-black  hover:text-primary transition-colors gap-2">
-            <span className="text-md uppercase">Bag </span>
+          <Link href="/cart" className="flex relative group items-center text-black  hover:text-primary transition-colors gap-[3px]">
+            <span className="text-sm uppercase">Bag</span>
                 
                 
                 {/* Badge */}
