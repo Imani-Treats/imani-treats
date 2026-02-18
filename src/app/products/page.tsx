@@ -20,7 +20,7 @@ export default function ProductsPage() {
           </Link>
 
           <div className="mt-5">
-            <h1 className="text-5xl md:text-6xl font-serif text-primary italic mb-2">
+            <h1 className="text-5xl md:text-6xl font-serif text-primary mb-2">
               The Lineup.
             </h1>
             <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">
