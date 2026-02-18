@@ -19,6 +19,8 @@ interface CartState {
   updateQuantity: (productId: string, quantity: number, variant?: string) => void;
   clearCart: () => void;
   getTotal: () => number;
+  getCartCount: () => number;
+  getTotalQuantity: () => number;
 }
 
 export const useCartStore = create<CartState>()(
@@ -26,7 +28,10 @@ export const useCartStore = create<CartState>()(
     (set, get) => ({
       cart: [], // Unified name to match interface
       hasSeenPreloader: false,
-      
+      getCartCount: () => get().cart.length,
+      getTotalQuantity: () => {
+        return get().cart.reduce((sum, item) => sum + item.quantity, 0);
+      },
       setHasSeenPreloader: (seen) => set({ hasSeenPreloader: seen }),
       
       addToCart: (product) => {

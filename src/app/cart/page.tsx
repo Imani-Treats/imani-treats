@@ -2,12 +2,13 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { X, Trash2, ArrowRight } from "lucide-react";
+import { X, Trash2, ArrowRight, Minus, Plus } from "lucide-react"; // <--- Added Plus/Minus
 import { useCartStore } from "@/lib/store";
 import { useEffect, useState } from "react";
 
 export default function CartPage() {
-  const { cart, removeFromCart, total } = useCartStore();
+  // 1. UPDATED: Destructure 'getTotal' and 'updateQuantity'
+  const { cart, removeFromCart, updateQuantity, getTotal } = useCartStore();
   const [mounted, setMounted] = useState(false);
 
   // Prevent hydration errors
@@ -20,7 +21,7 @@ export default function CartPage() {
   return (
     <div className="min-h-screen bg-[#fafafa] flex flex-col items-center py-12 px-4 md:px-6 pt-24">
       
-      {/* Main Container (mimicking the card look in the UI) */}
+      {/* Main Container */}
       <div className="w-full max-w-2xl bg-white shadow-sm rounded-lg overflow-hidden min-h-[80vh] flex flex-col relative">
         
         {/* --- HEADER --- */}
@@ -60,23 +61,44 @@ export default function CartPage() {
                 <div className="flex-1">
                   <h3 className="font-serif text-sm text-primary">{item.name}</h3>
                   
-                  {/* Variant (Optional) */}
+                  {/* Variant */}
                   {item.variant && (
-                    <p className="text-[10px] font-bold text-orange-500 uppercase tracking-widest mt-1 mb-1">
+                    <p className="text-[10px] font-bold text-orange-500 uppercase tracking-widest mt-1 mb-2">
                       {item.variant}
                     </p>
                   )}
 
-                  {/* Quantity x Price */}
-                  <p className="text-xs text-gray-400 font-medium">
-                    {item.quantity} <span className="mx-1">×</span> ₦{item.price.toLocaleString()}
-                  </p>
+                  {/* Quantity Controls & Price */}
+                  <div className="flex items-center gap-4">
+                    {/* Plus/Minus Buttons */}
+                    <div className="flex items-center gap-3 bg-gray-50 rounded-full px-2 py-1">
+                      <button 
+                        onClick={() => updateQuantity(item.id, Math.max(1, item.quantity - 1), item.variant)}
+                        className="p-1 hover:text-black text-gray-400 transition-colors"
+                      >
+                        <Minus className="w-3 h-3" />
+                      </button>
+                      
+                      <span className="text-xs font-bold w-3 text-center">{item.quantity}</span>
+                      
+                      <button 
+                        onClick={() => updateQuantity(item.id, item.quantity + 1, item.variant)}
+                        className="p-1 hover:text-black text-gray-400 transition-colors"
+                      >
+                        <Plus className="w-3 h-3" />
+                      </button>
+                    </div>
+
+                    <p className="text-xs text-gray-400 font-medium">
+                       x ₦{item.price.toLocaleString()}
+                    </p>
+                  </div>
                 </div>
 
                 {/* Remove Button */}
                 <button 
                   onClick={() => removeFromCart(item.id, item.variant)}
-                  className="text-gray-300 hover:text-red-500 transition-colors"
+                  className="text-gray-300 hover:text-red-500 transition-colors p-2"
                 >
                   <Trash2 className="w-5 h-5" />
                 </button>
@@ -94,8 +116,9 @@ export default function CartPage() {
               <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                 Subtotal
               </span>
+              {/* 2. UPDATED: Use getTotal() function */}
               <span className="text-2xl font-serif text-primary italic">
-                ₦{total().toLocaleString()}
+                ₦{getTotal().toLocaleString()}
               </span>
             </div>
 

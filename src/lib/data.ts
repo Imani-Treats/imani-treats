@@ -73,5 +73,5 @@ export const PRODUCTS: Product[] = [
     drop_date: "2025-12-25",
     stock: 1,
     variants: ["Beef", "Chicken", "Asun"] 
-  }
+  } 
 ];

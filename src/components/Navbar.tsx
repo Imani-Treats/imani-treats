@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import SlideMenu from "./SlideMenu"; // <--- Import the new component
 
 export default function Navbar() {
-  const cart = useCartStore((state) => state.cart);
+  const { getCartCount } = useCartStore();
   const [mounted, setMounted] = useState(false);
   
   // New State for Menu
@@ -17,7 +17,7 @@ export default function Navbar() {
     setMounted(true);
   }, []);
 
-  const itemCount = mounted ? cart.reduce((acc, item) => acc + item.quantity, 0) : 0;
+  const count = mounted ? getCartCount() : 0;
 
   return (
     <>
@@ -42,11 +42,19 @@ export default function Navbar() {
           </Link>
 
           {/* RIGHT: Cart */}
-          <Link href="/cart" className="flex items-center gap-1 text-black hover:text-primary/80 transition font-sans text-xs font-medium">
-            <span>BAG</span>
-            <span>({itemCount})</span>
-            <ShoppingBag className="w-5 h-5" />
-          </Link>
+          <Link href="/cart" className="flex relative group items-center text-black  hover:text-primary transition-colors gap-2">
+            <span className="text-md uppercase">Bag </span>
+                
+                
+                {/* Badge */}
+                {count > 0 && (
+                  <span >
+                   ({count})
+                  </span>
+                )}
+
+                <ShoppingBag className="w-6 h-6 group-hover:scale-110 transition-transform" />
+            </Link>
           
         </div>
       </nav>
