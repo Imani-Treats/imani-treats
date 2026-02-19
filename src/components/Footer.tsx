@@ -10,8 +10,8 @@ export default function Footer() {
         
         {/* Left Column: Brand & Socials */}
         <div className="space-y-6 md:w-1/2">
-          <h2 className="text-4xl font-serif italic">Imani Treats</h2>
-          <p className="text-white/80 text-sm leading-relaxed max-w-sm">
+          <h2 className="text-4xl font-serif">Imani Treats</h2>
+          <p className="text-white/80 text-sm md:text-lg leading-relaxed max-w-md">
             “Small batches, wild yeast, and enough time
             to let the flavor develop naturally. Our 
             Phoenix micro-bakery operates on a strict
@@ -27,10 +27,10 @@ export default function Footer() {
 
         {/* Right Column: Newsletter */}
         <div className="space-y-6 md:w-1/3">
-          <h3 className="text-lg font-bold font-serif tracking-wide">
+          <h3 className="text-lg md:text-xl font-bold font-serif tracking-wide">
             Weekly Newsletter
           </h3>
-          <p className="text-white/60 text-xs">
+          <p className="text-white/60 text-xs md:text-lg">
             Join over 1000+ customers to get notified about the next drop before it sells out.
           </p>
           
@@ -38,7 +38,7 @@ export default function Footer() {
             <input 
               type="email" 
               placeholder="Email Address" 
-              className="bg-transparent border-none outline-none text-white placeholder-white/50 w-full text-sm"
+              className="bg-transparent border-none outline-none text-white placeholder-white/50 w-full text-md"
             />
             <button type="button" className="text-white hover:text-orange-400 transition">
               <ArrowRight className="w-5 h-5" />
@@ -48,7 +48,7 @@ export default function Footer() {
       </div>
 
       {/* Bottom Bar: Contact Info */}
-      <div className="mt-10 pt-8 border-white/10 flex flex-col md:flex-row items-center justify-center gap-6 text-[10px] tracking-widest text-white/60 uppercase">
+      <div className="mt-10 pt-8 border-white/10 flex flex-col md:flex-row items-center justify-center gap-6 text-sm tracking-widest text-white/60 uppercase">
       <div className="flex gap-5">
         <div className="flex items-center gap-2">
             <MapPin className="w-3 h-3" />

@@ -77,7 +77,7 @@ export default function ProductDetailPage() {
 
   return (
     <>
-    <div className="bg-[#fafafa] min-h-screen pt-24 pb-12">
+    <div className="bg-[#fafafa] min-h-screen pt-24 md:pt-40 max-w-7xl m-auto pb-12">
       
         {/* Back Link */}
         <Link href="/products" className="inline-flex items-center text-sm text-gray-500 pb-10 px-6 hover:text-primary transition-colors">

@@ -31,7 +31,7 @@ export default function Hero() {
 
   return (
     <>
-    <section className="relative w-full h-[90vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
+    <section className="relative w-full h-[100vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
       
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
@@ -78,19 +78,19 @@ export default function Hero() {
             Your Cravings<span className="text-btn">, </span> Sorted
           </InteractiveMarquee>
         </div>
-        <span className="text-xs font-bold tracking-[0.2em] uppercase text-black">
+        <span className="text-xs md:text-lg font-bold tracking-[0.2em] uppercase text-black">
             We have a flavour for every mood
           </span>
         {/* CTA Button */}
         <Link 
           href="/products"
-          className="inline-block bg-primary px-10 py-4 mt-10 uppercase font-semibold text-sm text-white tracking-widest hover:bg-orange-700 hover:scale-105 rounded-full transition-all duration-300 shadow-xl"
+          className="inline-block bg-primary px-10 md:px-20 py-4 md:py-6 mt-10 uppercase font-semibold text-sm md:text-lg text-white tracking-widest hover:bg-orange-700 hover:scale-105 rounded-full transition-all duration-300 shadow-xl"
         >
           View Treats
         </Link>
         <button 
               onClick={() => setIsBulkOpen(true)}
-              className="text-xs font-bold uppercase tracking-widest text-primary/70 hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all mt-2">
+              className="text-xs md:text-[15px] font-bold uppercase tracking-widest text-primary/70 hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all mt-2">
               Bulk Orders?
         </button>
 
@@ -142,7 +142,7 @@ function InteractiveMarquee({ children, baseVelocity = 100 }: { children: React.
         {Array.from({ length: 8 }).map((_, i) => (
           <h1 
             key={i} 
-            className="text-[10rem] md:text-[9rem] font-black text-black leading-none flex-shrink-0 tracking-tighter opacity-90 hover:opacity-100 transition-opacity uppercase"
+            className="text-[10rem] md:text-[15rem] lg:text-[20rem] font-black text-black leading-none flex-shrink-0 tracking-tighter opacity-90 hover:opacity-100 transition-opacity uppercase"
           >
             {children} <span className="text-orange-600 mx-4">•</span>
           </h1>

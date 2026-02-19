@@ -7,8 +7,8 @@ import { PRODUCTS } from "@/lib/data"; // <--- Import from central source
 
 export default function ProductsPage() {
   return (
-    <div className="min-h-screen bg-[#fafafa] pt-24 pb-12 px-6">
-      <div className="max-w-3xl mx-auto">
+    <div className="min-h-screen bg-[#fafafa] max-w-7xl mx-auto pt-24 md:pt-40 pb-12 px-6">
+      <div className="">
         
         <div className="mb-12 space-y-6">
           <Link 
@@ -30,7 +30,7 @@ export default function ProductsPage() {
         </div>
 
         {/* Use the centralized PRODUCTS array */}
-        <div className="flex flex-col gap-16 mb-24">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
           {PRODUCTS.map((product) => (
             <ProductCard key={product.id} product={product} />
           ))}
