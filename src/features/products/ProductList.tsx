@@ -1,11 +1,30 @@
+"use client";
+
+import { useEffect, useState } from "react";
 import ProductCard from "./ProductCard";
-import { PRODUCTS } from "@/lib/data"; // <--- Import from central source
 import Link from "next/link";
-import { ArrowRight } from "lucide-react"
+import { ArrowRight } from "lucide-react";
+import { getProducts } from "@/lib/supabase"; // <--- Import from Supabase
+import { Product } from "@/types";            // <--- Import Product type
 
 export default function ProductList() {
+  // State to hold the live data and loading status
+  const [products, setProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
+
+  // Fetch data when the component mounts
+  useEffect(() => {
+    async function fetchProducts() {
+      const data = await getProducts();
+      setProducts(data);
+      setIsLoading(false);
+    }
+    
+    fetchProducts();
+  }, []);
+
   // We only want to show the first 3 items on the homepage
-  const featuredProducts = PRODUCTS.slice(0, 3);
+  const featuredProducts = products.slice(0, 3);
 
   return (
     <section id="products" className="py-15 px-6 bg-[#fafafa]">
@@ -19,11 +38,18 @@ export default function ProductList() {
           </h2>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
-          {featuredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
-          ))}
-        </div>
+        {/* Show a loading spinner while fetching, otherwise show the grid */}
+        {isLoading ? (
+          <div className="flex justify-center items-center py-20">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-16">
+            {featuredProducts.map((product) => (
+              <ProductCard key={product.id} product={product} />
+            ))}
+          </div>
+        )}
 
         <div className="flex justify-center border-t border-gray-200 mt-4 pt-4">
           <Link 

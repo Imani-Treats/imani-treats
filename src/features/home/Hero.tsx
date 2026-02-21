@@ -31,7 +31,7 @@ export default function Hero() {
 
   return (
     <>
-    <section className="relative w-full h-[100vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
+    <section className="relative w-full h-[120vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
       
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
@@ -142,7 +142,7 @@ function InteractiveMarquee({ children, baseVelocity = 100 }: { children: React.
         {Array.from({ length: 8 }).map((_, i) => (
           <h1 
             key={i} 
-            className="text-[10rem] md:text-[15rem] lg:text-[20rem] font-black text-black leading-none flex-shrink-0 tracking-tighter opacity-90 hover:opacity-100 transition-opacity uppercase"
+            className="text-[10rem] md:text-[15rem] font-black text-black leading-none flex-shrink-0 tracking-tighter opacity-90 hover:opacity-100 transition-opacity uppercase"
           >
             {children} <span className="text-orange-600 mx-4">•</span>
           </h1>

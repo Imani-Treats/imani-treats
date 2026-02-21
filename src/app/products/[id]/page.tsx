@@ -7,43 +7,58 @@ import { MoveLeft, ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, CreditCa
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/lib/store";
 import RelatedProducts from "@/features/products/RelatedProducts";
-import { PRODUCTS } from "@/lib/data";
 import BulkOrderModal from "@/components/BulkOrderModal";
+import { getProducts } from "@/lib/supabase"; // <--- Import Supabase fetcher
+import { Product } from "@/types";            // <--- Import Type
 
 export default function ProductDetailPage() {
   const params = useParams();
   const router = useRouter();
   const addToCart = useCartStore((state) => state.addToCart);
 
-  const product = PRODUCTS.find((p) => p.id === params.id);
+  // --- DATA STATES ---
+  const [product, setProduct] = useState<Product | null>(null);
+  const [relatedProducts, setRelatedProducts] = useState<Product[]>([]);
+  const [isLoading, setIsLoading] = useState(true);
 
-  const productImages = product?.images?.length ? product.images : [product?.image_url || ""];
-  
-  // States
+  // --- UI STATES ---
   const [currentImageIndex, setCurrentImageIndex] = useState(0);
   const [quantity, setQuantity] = useState(1);
-  const [selectedVariant, setSelectedVariant] = useState(
-    product?.variants?.[0] || "Standard"
-  );
+  const [selectedVariant, setSelectedVariant] = useState("Standard");
   const [isAdded, setIsAdded] = useState(false);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
-  
-  // Stock Logic
-  const stock = product?.stock || 0;
-  const isSoldOut = stock === 0;
-
-  // --- SWIPE LOGIC (Kept from previous task) ---
   const [touchStart, setTouchStart] = useState(0);
   const [touchEnd, setTouchEnd] = useState(0);
 
-  if (!product) return (
-    <div className="min-h-screen flex flex-col items-center justify-center space-y-4">
-        <h2 className="text-2xl font-serif text-primary">Product Not Found</h2>
-        <Link href="/products" className="text-sm underline hover:text-orange-600">Return to Lineup</Link>
-    </div>
-  );
+  // --- FETCH DATA ON MOUNT ---
+  useEffect(() => {
+    async function fetchData() {
+      setIsLoading(true);
+      const allProducts = await getProducts();
+      
+      // Find the specific product
+      const foundProduct = allProducts.find((p) => p.id === params.id);
+      
+      if (foundProduct) {
+        setProduct(foundProduct);
+        // Set default variant safely
+        setSelectedVariant(foundProduct.variants?.[0] || "Standard");
+        // Get related products (excluding current one)
+        setRelatedProducts(allProducts.filter(p => p.id !== params.id).slice(0, 4));
+      }
+      
+      setIsLoading(false);
+    }
+    
+    fetchData();
+  }, [params.id]);
 
-  // Navigation & Swipe Handlers
+  // Derived values (Safe to calculate now since we handle loading state below)
+  const productImages = product?.images?.length ? product.images : [product?.image_url || ""];
+  const stock = product?.stock || 0;
+  const isSoldOut = stock === 0;
+
+  // --- IMAGE SLIDER LOGIC ---
   const nextImage = () => setCurrentImageIndex((prev) => (prev === productImages.length - 1 ? 0 : prev + 1));
   const prevImage = () => setCurrentImageIndex((prev) => (prev === 0 ? productImages.length - 1 : prev - 1));
 
@@ -63,17 +78,34 @@ export default function ProductDetailPage() {
     setTouchStart(0); setTouchEnd(0);
   };
 
+  // --- CART LOGIC ---
   const handleAddToCart = () => {
-    if (isSoldOut) return;
+    if (isSoldOut || !product) return;
     addToCart({ ...product, quantity, variant: selectedVariant });
     setIsAdded(true);
     setTimeout(() => setIsAdded(false), 2000);
   };
 
-  // Logic to prevent increasing quantity beyond stock
   const increaseQuantity = () => {
     if (quantity < stock) setQuantity(quantity + 1);
   };
+
+  // --- RENDER SCREENS ---
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-[#fafafa] flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
+
+  if (!product) return (
+    <div className="min-h-screen flex flex-col items-center justify-center space-y-4 bg-[#fafafa]">
+        <h2 className="text-2xl font-serif text-primary">Product Not Found</h2>
+        <Link href="/products" className="text-sm underline hover:text-orange-600">Return to Lineup</Link>
+    </div>
+  );
 
   return (
     <>
@@ -88,7 +120,7 @@ export default function ProductDetailPage() {
         
         {/* --- LEFT: IMAGE SLIDER --- */}
         <div 
-          className="relative aspect-square md:aspect-[4/5] bg-gray-100 rounded-sm overflow-hidden group touch-pan-y"
+          className="relative aspect-square md:aspect-[5/5] bg-gray-100 rounded-sm overflow-hidden group touch-pan-y"
           onTouchStart={handleTouchStart}
           onTouchMove={handleTouchMove}
           onTouchEnd={handleTouchEnd}
@@ -230,7 +262,7 @@ export default function ProductDetailPage() {
       
       {/* Related */}
       <div className="max-w-6xl mx-auto mb-12 px-6">
-        <RelatedProducts products={PRODUCTS.filter(p => p.id !== product.id).slice(0, 4)} />
+        <RelatedProducts products={relatedProducts} />
       </div>
     </div>
     <BulkOrderModal isOpen={isBulkOpen} onClose={() => setIsBulkOpen(false)} />
