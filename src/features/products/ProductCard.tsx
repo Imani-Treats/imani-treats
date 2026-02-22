@@ -20,7 +20,7 @@ export default function ProductCard({ product }: ProductCardProps) {
         {/* IMAGE SECTION */}
         <div className="relative aspect-square bg-[#F2F2F2] overflow-hidden">
           <Image
-            src={product.image_url}
+            src={product.images?.[0] || "/placeholder.jpg"}
             alt={product.name}
             fill
             className="object-cover object-center transition-transform duration-500 group-hover:scale-105"

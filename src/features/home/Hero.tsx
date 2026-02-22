@@ -5,6 +5,7 @@ import Image from "next/image";
 import { Clock } from 'lucide-react';
 import { useCountdown } from "@/hooks/useCountdown";
 import { useEffect, useState, useRef } from "react";
+import { supabase } from "@/lib/supabase";
 import { 
   motion, 
   useAnimationFrame, 
@@ -21,9 +22,21 @@ export default function Hero() {
   const [targetDate, setTargetDate] = useState<string>("");
   const [isBulkOpen, setIsBulkOpen] = useState(false);
 
+
   useEffect(() => {
-    const nextSaturday = getNextSaturday();
-    setTargetDate(nextSaturday.toISOString());
+    async function fetchGlobalDropDate() {
+      const { data, error } = await supabase
+        .from('store_settings')
+        .select('next_drop_date')
+        .eq('id', 1)
+        .single();
+        
+      if (data?.next_drop_date && !error) {
+        setTargetDate(data.next_drop_date);
+      }
+    }
+    
+    fetchGlobalDropDate();
   }, []);
 
   // 2. Use the dynamic date
@@ -164,19 +177,6 @@ function TimeBox({ value, label }: { value: number; label: string }) {
   );
 }
 
-// 3. Date Helper
-function getNextSaturday() {
-  const now = new Date();
-  const dayOfWeek = now.getDay(); 
-  const daysUntilSaturday = (6 - dayOfWeek + 7) % 7; 
-  const daysToAdd = daysUntilSaturday === 0 ? 7 : daysUntilSaturday;
-
-  const nextSaturday = new Date(now);
-  nextSaturday.setDate(now.getDate() + daysToAdd);
-  nextSaturday.setHours(9, 0, 0, 0);
-
-  return nextSaturday;
-}
 
 // 4. Math Helper for wrapping range
 // Wraps 'v' such that min <= v < max
