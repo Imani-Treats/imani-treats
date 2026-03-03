@@ -1,9 +1,18 @@
 "use client";
 
 import SocialIcon from "./socialmedia";
+import Link from "next/link";
+import WaitlistForm from "@/components/WaitlistForm";
 import { Facebook, Instagram, Youtube, ArrowRight, MapPin, Phone, Mail } from "lucide-react";
+import { usePathname } from "next/navigation";
 
 export default function Footer() {
+  const pathname = usePathname();
+
+  if (pathname.startsWith("/admin")) {
+    return null;
+  }
+
   return (
     <footer className="bg-primary text-white pt-20 pb-10 px-6">
       <div className="max-w-7xl mx-auto flex flex-col md:flex-row justify-between gap-16">
@@ -34,16 +43,7 @@ export default function Footer() {
             Join over 1000+ customers to get notified about the next drop before it sells out.
           </p>
           
-          <form className="flex items-center border-b border-white/30 py-2">
-            <input 
-              type="email" 
-              placeholder="Email Address" 
-              className="bg-transparent border-none outline-none text-white placeholder-white/50 w-full text-md"
-            />
-            <button type="button" className="text-white hover:text-orange-400 transition">
-              <ArrowRight className="w-5 h-5" />
-            </button>
-          </form>
+          <WaitlistForm />
         </div>
       </div>
 
@@ -65,6 +65,9 @@ export default function Footer() {
           <Mail className="w-3 h-3" />
           <span>imanitreatsng@gmail.com</span>
         </div>
+      </div>
+      <div className="w-fit mx-auto mt-5">
+        <Link href="https://nenshallom.netlify.app/" target="blank" className="text-xs text-blue-500/50">Built By NSG</Link>
       </div>
     </footer>
   );

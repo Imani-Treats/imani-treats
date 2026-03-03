@@ -2,14 +2,15 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import WaitlistForm from "@/components/WaitlistForm";
 import { useParams, useRouter } from "next/navigation";
 import { MoveLeft, ChevronLeft, ChevronRight, Minus, Plus, ShoppingBag, CreditCard, Check, AlertCircle } from "lucide-react";
 import { useState, useEffect } from "react";
 import { useCartStore } from "@/lib/store";
 import RelatedProducts from "@/features/products/RelatedProducts";
 import BulkOrderModal from "@/components/BulkOrderModal";
-import { getProducts } from "@/lib/supabase"; // <--- Import Supabase fetcher
-import { Product } from "@/types";            // <--- Import Type
+import { getProducts } from "@/lib/supabase"; 
+import { Product } from "@/types";            
 
 export default function ProductDetailPage() {
   const params = useParams();
@@ -111,7 +112,6 @@ export default function ProductDetailPage() {
     <>
     <div className="bg-[#fafafa] min-h-screen pt-24 md:pt-40 max-w-7xl m-auto pb-12">
       
-        {/* Back Link */}
         <Link href="/products" className="inline-flex items-center text-sm text-gray-500 pb-10 px-6 hover:text-primary transition-colors">
           <MoveLeft className="w-4 h-4 mr-1" /> Back
         </Link>
@@ -208,13 +208,21 @@ export default function ProductDetailPage() {
 
           {/* --- ACTIONS SECTION --- */}
           {isSoldOut ? (
-            // SOLD OUT MESSAGE
-            <div className="bg-gray-50 border border-gray-200 p-6 rounded-lg text-center space-y-3">
+            // SOLD OUT MESSAGE & WAITLIST
+            <div className="bg-gray-50 border border-gray-200 p-6 rounded-lg text-center space-y-4">
               <AlertCircle className="w-8 h-8 text-gray-400 mx-auto" />
               <h3 className="font-serif text-xl text-primary italic">Sold Out for this Drop</h3>
               <p className="text-sm text-gray-600 leading-relaxed">
                 This item is no longer available. Please make an order immediately after the next drop ends as our products are on a <span className="font-bold">"first come first serve"</span> basis.
               </p>
+              
+              {/* Waitlist Form Integration */}
+              <div className="mt-4 border-t border-gray-200 pt-6">
+                <p className="text-xs font-bold text-gray-500 uppercase tracking-widest mb-4">
+                  Don't miss the next drop
+                </p>
+                <WaitlistForm productName={product.name} leadType="product_waitlist" />
+              </div>
             </div>
           ) : (
             // ACTIVE BUY BUTTONS

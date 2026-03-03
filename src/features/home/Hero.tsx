@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import Image from "next/image";
+import WaitlistForm from "@/components/WaitlistForm";
 import { Clock } from 'lucide-react';
 import { useCountdown } from "@/hooks/useCountdown";
 import { useEffect, useState, useRef } from "react";
@@ -44,7 +45,7 @@ export default function Hero() {
 
   return (
     <>
-    <section className="relative w-full h-[120vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
+    <section className="relative w-full h-[70vh] lg:h-[120vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
       
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
@@ -74,7 +75,7 @@ export default function Hero() {
           <span className="text-xs font-bold tracking-[0.2em] uppercase text-primary/90">
             Next Drop In:
           </span>
-          <div className="flex gap-4 text-primary font-serif">
+          <div className="flex gap-4 text-btn font-serif">
             <TimeBox value={days} label="Days" />
             <span className="text-2xl mt-1 opacity-50">:</span>
             <TimeBox value={hours} label="Hrs" />
@@ -95,15 +96,12 @@ export default function Hero() {
             We have a flavour for every mood
           </span>
         {/* CTA Button */}
-        <Link 
-          href="/products"
-          className="inline-block bg-primary px-10 md:px-20 py-4 md:py-6 mt-10 uppercase font-semibold text-sm md:text-lg text-white tracking-widest hover:bg-orange-700 hover:scale-105 rounded-full transition-all duration-300 shadow-xl"
-        >
-          View Treats
-        </Link>
+        <div className="w-full max-w-md mt-6">
+          <WaitlistForm />
+        </div>
         <button 
               onClick={() => setIsBulkOpen(true)}
-              className="text-xs md:text-[15px] font-bold uppercase tracking-widest text-primary/70 hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all mt-2">
+              className="text-xs md:text-[15px] font-bold uppercase tracking-widest text-primary/70 cursor-pointer hover:text-primary underline decoration-dotted underline-offset-4 hover:scale-105 transition-all mt-2">
               Bulk Orders?
         </button>
 

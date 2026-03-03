@@ -47,7 +47,7 @@ export default function CheckoutPage() {
       }
 
       // Fetch Store Settings
-      const { data: settings } = await supabase.from('store_settings').select('pickup_address').single();
+      const { data: settings } = await supabase.from('store_settings').select('pickup_address').eq('id', 1).single();
       if (settings) setStoreAddress(settings.pickup_address);
 
       setIsLoadingData(false);
@@ -58,10 +58,17 @@ export default function CheckoutPage() {
 
   if (!mounted) return null;
 
-  // --- CALCULATIONS ---
+  // --- DYNAMIC CALCULATIONS ---
   const subtotal = getTotal();
+  
+  // Find the fee for the selected state, or fallback to the "Other" zone if available
   const selectedZone = deliveryZones.find(z => z.state_name === formData.state);
-  const deliveryFee = deliveryMethod === 'delivery' ? (selectedZone?.fee || 0) : 0;
+  const fallbackZone = deliveryZones.find(z => z.state_name.toLowerCase() === 'other');
+  
+  const deliveryFee = deliveryMethod === 'delivery' 
+    ? (selectedZone?.fee ?? fallbackZone?.fee ?? 0) 
+    : 0; // Pickup is always 0
+    
   const totalAmount = subtotal + deliveryFee;
 
   // --- HANDLERS ---
@@ -73,6 +80,36 @@ export default function CheckoutPage() {
     return `${prefix}-${Math.random().toString(36).substring(2, 8).toUpperCase()}`;
   };
 
+  // --- SILENT LEAD CAPTURE ---
+  const handleEmailBlur = async () => {
+    if (!formData.email || !formData.email.includes('@')) return;
+
+    try {
+      // SMART CHECK: Only look for an existing PENDING "Checkout Abandonment" lead. 
+      // This ignores any product waitlists they might be on!
+      const { data: existing } = await supabase
+        .from('waitlist')
+        .select('id')
+        .eq('email', formData.email)
+        .eq('lead_type', 'checkout_abandonment')
+        .eq('status', 'pending')
+        .single();
+
+      if (!existing) {
+        await supabase.from('waitlist').insert([
+          { 
+            email: formData.email, 
+            product_name: 'Pending Cart', 
+            lead_type: 'checkout_abandonment',
+            status: 'pending'
+          }
+        ]);
+      }
+    } catch (error) {
+      console.error("Silent capture failed");
+    }
+  }
+
   const handleSubmitOrder = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsSubmitting(true);
@@ -83,7 +120,7 @@ export default function CheckoutPage() {
       const trackingCode = generateCode('TRK');
       const reservationCode = isOnline ? null : generateCode('RSV');
 
-      // 1. Save to Supabase first (defaults to pending_payment or reserved)
+      // 1. Save to Supabase first 
       const { data, error } = await supabase.from('orders').insert([
         {
           customer_name: formData.name,
@@ -107,7 +144,6 @@ export default function CheckoutPage() {
       // 2. HANDLE NEXT STEPS BASED ON PAYMENT METHOD
       if (!isOnline) {
         // --- PAY LATER FLOW ---
-        // Send Reservation Email
         await fetch('/api/emails', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
@@ -119,26 +155,29 @@ export default function CheckoutPage() {
           })
         });
 
+        // Deduct stock for Pay Later (Reserved)
+        for (const item of cart) {
+          await supabase.rpc('deduct_stock', { 
+            product_id: item.id, 
+            quantity_to_deduct: item.quantity 
+          });
+        }
         setSuccessData(data);
         clearCart();
         setIsSubmitting(false);
 
       } else {
         // --- PAY ONLINE FLOW (PAYSTACK) ---
-        // Dynamically import Paystack to prevent Next.js server-side errors
         const PaystackPop = (await import('@paystack/inline-js')).default;
         const paystack = new PaystackPop();
 
         paystack.newTransaction({
           key: process.env.NEXT_PUBLIC_PAYSTACK_PUBLIC_KEY!,
           email: formData.email,
-          amount: totalAmount * 100, // Paystack requires the amount in Kobo (multiply by 100)
-          reference: trackingCode, // We use your generated tracking code as the official reference
+          amount: totalAmount * 100, 
+          reference: trackingCode, 
           onSuccess: async () => {
-            // 1. Payment worked! Update database status to 'paid'
             await supabase.from('orders').update({ status: 'paid' }).eq('id', data.id);
-
-            // 2. Send the confirmation email
             await fetch('/api/emails', {
               method: 'POST',
               headers: { 'Content-Type': 'application/json' },
@@ -149,8 +188,14 @@ export default function CheckoutPage() {
                 orderDetails: data
               })
             });
-
-            // 3. Complete checkout
+            //` Deduct stock for paid orders
+            for (const item of cart) {
+              await supabase.rpc('deduct_stock', { 
+                product_id: item.id, 
+                quantity_to_deduct: item.quantity 
+              });
+            }
+            
             setSuccessData(data);
             clearCart();
             setIsSubmitting(false);
@@ -167,8 +212,6 @@ export default function CheckoutPage() {
       setErrorMsg("Something went wrong saving your order. Please try again.");
       setIsSubmitting(false);
     } 
-    // Note: We removed the 'finally' block here so setIsSubmitting doesn't 
-    // turn off while the Paystack window is still open!
   };
 
   // --- SUCCESS SCREEN ---
@@ -244,11 +287,24 @@ export default function CheckoutPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
                     <div>
                       <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Email Address</label>
-                      <input type="email" required name="email" value={formData.email} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="jane@example.com" />
+                      <input 
+                        type="email" 
+                        required 
+                        name="email" 
+                        value={formData.email} 
+                        onBlur={handleEmailBlur}
+                        onChange={handleInputChange} 
+                        className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="jane@example.com" />
                     </div>
                     <div>
                       <label className="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Phone Number <span className="text-orange-500 lowercase normal-case ml-1 font-normal">(WhatsApp pref.)</span></label>
                       <input type="tel" required name="phone" value={formData.phone} onChange={handleInputChange} className="w-full bg-gray-50 border border-gray-200 px-4 py-3 rounded-md focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none" placeholder="+234 800 000 0000" />
+                      <div className="col-span-1 md:col-span-2 mt-2">
+                        <label className="flex items-center gap-2 cursor-pointer">
+                          <input type="checkbox" defaultChecked className="w-4 h-4 text-primary accent-primary rounded border-gray-300" />
+                          <span className="text-xs text-gray-500">Keep me updated on exclusive drops and offers via email.</span>
+                        </label>
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -337,7 +393,8 @@ export default function CheckoutPage() {
                   {cart.map((item) => (
                     <div key={`${item.id}-${item.variant}`} className="flex gap-4 items-center">
                       <div className="relative w-16 h-16 bg-gray-100 rounded-sm overflow-hidden flex-shrink-0 border border-gray-200">
-                        <Image src={item.image_url} alt={item.name} fill className="object-cover" />
+                        {/* CHANGED THIS LINE: Safely read the new 'images' array instead of old image_url */}
+                        <Image src={item.images?.[0] || item.image_url || "/placeholder.jpg"} alt={item.name} fill className="object-cover" />
                       </div>
                       <div className="flex-1">
                         <h3 className="font-serif text-sm text-primary leading-tight">{item.name}</h3>

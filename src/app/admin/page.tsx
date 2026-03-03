@@ -34,15 +34,44 @@ export default function AdminDashboard() {
     setIsLoading(false);
   }
 
+  // --- UPGRADED STATUS FUNCTION WITH RESTOCK LOGIC ---
   async function updateOrderStatus(id: string, newStatus: string, e?: React.ChangeEvent<HTMLSelectElement>) {
-    e?.stopPropagation(); // Prevent opening the modal when clicking the dropdown
+    e?.stopPropagation(); 
     
+    // Find the current order so we know what items it has and its old status
+    const orderToUpdate = orders.find(o => o.id === id);
+    if (!orderToUpdate) return;
+    
+    const oldStatus = orderToUpdate.status;
+
+    // 1. Update the status in the database
     const { error } = await supabase
       .from('orders')
       .update({ status: newStatus })
       .eq('id', id);
       
     if (!error) {
+      // 2. THE LOGIC: RESTOCK ITEMS (If changing to 'cancelled' from an active state)
+      if (newStatus === 'cancelled' && oldStatus !== 'cancelled') {
+        for (const item of orderToUpdate.items) {
+          await supabase.rpc('restock_items', {
+            product_id: item.id,
+            quantity_to_add: item.quantity
+          });
+        }
+      }
+      
+      // 3. THE FAILSAFE: DEDUCT ITEMS (If you accidentally cancelled and are changing it back to active)
+      if (oldStatus === 'cancelled' && newStatus !== 'cancelled') {
+        for (const item of orderToUpdate.items) {
+          await supabase.rpc('deduct_stock', {
+            product_id: item.id,
+            quantity_to_deduct: item.quantity
+          });
+        }
+      }
+
+      // Update UI
       fetchOrders(); 
       if (selectedOrder && selectedOrder.id === id) {
         setSelectedOrder({ ...selectedOrder, status: newStatus });
@@ -119,6 +148,7 @@ export default function AdminDashboard() {
                 <option value="paid">Paid</option>
                 <option value="confirmed">Confirmed</option>
                 <option value="delivered">Delivered</option>
+                <option value="cancelled">Cancelled</option>
               </select>
             </div>
           </div>
@@ -171,16 +201,18 @@ export default function AdminDashboard() {
                       <span className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest ${
                         order.status === 'paid' || order.status === 'confirmed' ? 'bg-green-100 text-green-700' : 
                         order.status === 'delivered' ? 'bg-gray-100 text-gray-600' : 
+                        order.status === 'cancelled' ? 'bg-red-100 text-red-600' :
                         'bg-orange-100 text-orange-600'
                       }`}>
-                        {order.status === 'paid' || order.status === 'confirmed' ? <CheckCircle className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
+                        {order.status === 'paid' || order.status === 'confirmed' ? <CheckCircle className="w-3 h-3" /> : 
+                         order.status === 'cancelled' ? <X className="w-3 h-3" /> : <Clock className="w-3 h-3" />}
                         {order.status.replace('_', ' ')}
                       </span>
                     </td>
                     <td className="p-4 text-right">
                       <select 
                         value={order.status}
-                        onClick={(e) => e.stopPropagation()} // Prevent row click when using dropdown
+                        onClick={(e) => e.stopPropagation()} 
                         onChange={(e) => updateOrderStatus(order.id, e.target.value, e)}
                         className="text-xs border border-gray-200 rounded p-1 outline-none focus:border-primary cursor-pointer bg-white"
                       >

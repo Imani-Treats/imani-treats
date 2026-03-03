@@ -9,9 +9,10 @@ import { useEffect, useState } from "react";
 interface SlideMenuProps {
   isOpen: boolean;
   onClose: () => void;
+  openDrawer?: (type: 'about' | 'where' | 'fun') => void;
 }
 
-export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
+export default function SlideMenu({ isOpen, onClose, openDrawer }: SlideMenuProps) {
   // Prevent scrolling when menu is open
   useEffect(() => {
     if (isOpen) {
@@ -74,9 +75,35 @@ export default function SlideMenu({ isOpen, onClose }: SlideMenuProps) {
           <nav className="flex flex-col gap-8">
             <MenuLink href="/products" label="Products" onClick={onClose} isCaps/>
             {/* <MenuLink href="#products" label="Recipes" onClick={onClose} isCaps /> */}
-            <MenuLink href="#" label="About" onClick={onClose} isCaps />
-            <MenuLink href="#" label="Where to Buy" onClick={onClose} isCaps/>
-            <MenuLink href="#" label="fun" onClick={onClose} isCaps/>
+            <button 
+            onClick={() => { 
+              openDrawer?.('about'); 
+              onClose(); 
+            }} 
+            className="font-sans text-2xl font-bold text-black tracking-widest uppercase text-left hover:text-primary transition"
+          >
+            About
+          </button>
+
+          <button 
+            onClick={() => { 
+              openDrawer?.('where'); 
+              onClose(); 
+            }} 
+            className="font-sans text-2xl font-bold text-black tracking-widest uppercase text-left hover:text-primary transition"
+          >
+            Where to Buy
+          </button>
+
+          <button 
+            onClick={() => { 
+              openDrawer?.('fun'); 
+              onClose(); 
+            }} 
+            className="font-sans text-2xl font-bold text-black tracking-widest uppercase text-left hover:text-primary transition"
+          >
+            Fun
+          </button>
           </nav>
 
         </div>
