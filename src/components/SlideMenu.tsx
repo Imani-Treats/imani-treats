@@ -67,7 +67,7 @@ export default function SlideMenu({ isOpen, onClose, openDrawer }: SlideMenuProp
         <div className="flex flex-col h-full  pt-10 pace-y-10 pl-2">
           
           {/* Label */}
-          <span className="text-orange-500 font-bold text-xs tracking-widest uppercase mb-2">
+          <span className="text-orange-500 font-bold text-xs tracking-widest uppercase mb-10">
             [Navigation]
           </span>
 
@@ -80,7 +80,7 @@ export default function SlideMenu({ isOpen, onClose, openDrawer }: SlideMenuProp
               openDrawer?.('about'); 
               onClose(); 
             }} 
-            className="font-sans text-2xl font-bold text-black tracking-widest uppercase text-left hover:text-primary transition"
+            className="font-sans text-2xl font-bold tracking-widest uppercase text-left hover:text-primary transition"
           >
             About
           </button>
@@ -90,7 +90,7 @@ export default function SlideMenu({ isOpen, onClose, openDrawer }: SlideMenuProp
               openDrawer?.('where'); 
               onClose(); 
             }} 
-            className="font-sans text-2xl font-bold text-black tracking-widest uppercase text-left hover:text-primary transition"
+            className="font-sans text-2xl font-bold  tracking-widest uppercase text-left hover:text-primary transition"
           >
             Where to Buy
           </button>
@@ -100,7 +100,7 @@ export default function SlideMenu({ isOpen, onClose, openDrawer }: SlideMenuProp
               openDrawer?.('fun'); 
               onClose(); 
             }} 
-            className="font-sans text-2xl font-bold text-black tracking-widest uppercase text-left hover:text-primary transition"
+            className="font-sans text-2xl font-bold tracking-widest uppercase text-left hover:text-primary transition"
           >
             Fun
           </button>
@@ -124,7 +124,7 @@ function MenuLink({ href, label, onClick, isCaps = false }: { href: string; labe
     <Link 
       href={href} 
       onClick={onClick}
-      className={`font-serif text-4xl md:text-6xl text-white hover:text-orange-400 transition-colors duration-300  ${
+      className={`font-serif text-2xl font-bold md:text-6xl text-white hover:text-orange-400 transition-colors duration-300  ${
         isCaps ? "uppercase" : ""
       }`}
     >
