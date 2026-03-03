@@ -45,7 +45,7 @@ export default function Hero() {
 
   return (
     <>
-    <section className="relative w-full h-[70vh] lg:h-[120vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
+    <section className="relative w-full h-[120vh] flex flex-col pt-40 items-center text-center overflow-hidden ">
       
       {/* Background Image */}
       <div className="absolute inset-0 -z-10">
