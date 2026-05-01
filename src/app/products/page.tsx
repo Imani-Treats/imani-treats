@@ -38,7 +38,7 @@ export default function ProductsPage() {
 
           <div className="mt-5">
             <h1 className="text-5xl md:text-6xl font-serif text-primary mb-2">
-              The Lineup.
+              The Menu Selection.
             </h1>
             <p className="text-[10px] font-bold tracking-widest text-gray-400 uppercase">
               All products below are reserved for the upcoming saturday drop limited quantities available

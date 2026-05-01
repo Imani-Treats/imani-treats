@@ -21,10 +21,7 @@ export default function Footer() {
         <div className="space-y-6 md:w-1/2">
           <h2 className="text-4xl font-serif">Imani Treats</h2>
           <p className="text-white/80 text-sm md:text-lg leading-relaxed max-w-md">
-            “Small batches, wild yeast, and enough time
-            to let the flavor develop naturally. Our 
-            Phoenix micro-bakery operates on a strict
-            drop schedule to ensure every loaf is prefect.”
+            “Small batches, fresh ingredients and the patience to get every detail right. Our microbakery works on a strict drop schedule, crafting each treat by hand so every bite is as fresh and satisfying as it should be.”
           </p>
           
           <div className="flex gap-4">

@@ -34,7 +34,7 @@ export default function ProductList() {
             The Selection
           </span>
           <h2 className="text-4xl font-serif text-primary">
-            Reserved Lineup.
+            Our Menu.
           </h2>
         </div>
 
